@@ -1,6 +1,8 @@
 import './App.css';
+import printMe from './print';
 
 function App() {
+  printMe();
   return (
     <div className="App">
       <header className="App-header">

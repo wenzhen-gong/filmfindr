@@ -3,10 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "lodash": "^4.17.21",
     "nodemon": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -15,8 +11,9 @@
   },
   "scripts": {
     "start": "nodemon server/server.js",
-    "build": "webpack --config webpack.config.js",
-    "dev": "export NODE_ENV=development; webpack-dev-server --open --hot --progress --color",
+    "build": "webpack",
+    "dev-bk": "export NODE_ENV=development; webpack-dev-server --open --hot --progress --color",
+    "dev": "webpack-dev-server --open",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "eslintConfig": {
@@ -41,9 +38,12 @@
     "@babel/core": "^7.23.9",
     "@babel/preset-env": "^7.23.9",
     "@babel/preset-react": "^7.23.3",
+    "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.10.0",
+    "html-webpack-plugin": "^5.6.0",
     "style-loader": "^3.3.4",
     "webpack": "^5.90.3",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
   }
 }
