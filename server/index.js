@@ -9,6 +9,12 @@ app.use(express.json());
 app.use('/', express.static(path.resolve(__dirname, '../dist')));
 
 
+app.get('/',
+(req, res) => {
+  return res.status(200).sendFile(path.join(__dirname, '../../dist/index.html'));
+}
+);
+
 
 app.use((err, req, res, next) => {
     const defaultErr = {

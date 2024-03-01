@@ -4,31 +4,26 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   entry: {
-    app: './client/index.js',
-    print: './client/print.js',
+    src: './client/index.js'
   },
   
   devtool: 'inline-source-map',
 
   devServer: {
-    // uncomment when serving bundled files directly from /dist after building
-    // static: {
-    //   directory: path.resolve(__dirname, 'dist'),
-    // }
     port: 8080,
-        static: {
-            publicPath: '/',
-            directory: path.join(__dirname, '/dist')
-        },
-        proxy: {
-            '/': {
-                target: 'http://localhost:3000',
-                secure: false,
-            }
-        },
-        hot: true,
-        open: true,
-        historyApiFallback: true
+    static: {
+        publicPath: '/',
+        directory: path.join(__dirname, '/dist')
+    },
+    proxy: {
+        '/api/**': {
+            target: 'http://localhost:3000',
+            secure: false,
+        }
+    },
+    hot: true,
+    open: true,
+    historyApiFallback: true
   },
 
   plugins: [
@@ -40,7 +35,8 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].bundle.js',
+    filename: 'bundle.js',
+    publicPath: '/',
   },
   mode:'development',
   module: {
