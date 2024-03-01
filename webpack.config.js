@@ -15,6 +15,20 @@ module.exports = {
     // static: {
     //   directory: path.resolve(__dirname, 'dist'),
     // }
+    port: 8080,
+        static: {
+            publicPath: '/',
+            directory: path.join(__dirname, '/dist')
+        },
+        proxy: {
+            '/': {
+                target: 'http://localhost:3000',
+                secure: false,
+            }
+        },
+        hot: true,
+        open: true,
+        historyApiFallback: true
   },
 
   plugins: [
