@@ -1,8 +1,7 @@
 import './App.css';
-import printMe from './print';
+import { Link } from "react-router-dom";
 
 function App() {
-  printMe();
   return (
     <div className="App">
       <header className="App-header">
@@ -17,6 +16,8 @@ function App() {
         >
           Learn React
         </a>
+        <Link to="about">About Us</Link>
+        <Link to="err">Error Page</Link>
       </header>
     </div>
   );

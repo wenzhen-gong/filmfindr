@@ -12,8 +12,8 @@
   "scripts": {
     "start": "nodemon server/server.js",
     "build": "webpack",
-    "dev-bk": "export NODE_ENV=development; webpack-dev-server --open --hot --progress --color",
-    "dev": "webpack-dev-server --open",
+    "dev-bk": "export NODE_ENV=development; webpack-dev-server --open --color",
+    "dev": "webpack-dev-server --open --color",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "eslintConfig": {

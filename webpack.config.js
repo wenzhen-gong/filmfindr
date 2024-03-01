@@ -5,16 +5,22 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 module.exports = {
   entry: {
     app: './client/index.js',
-    print: './client/print.js',
   },
   
   devtool: 'inline-source-map',
 
   devServer: {
-    // uncomment when serving bundled files directly from /dist after building
+    // // uncomment when serving bundled files directly from /dist after building
     // static: {
     //   directory: path.resolve(__dirname, 'dist'),
     // }
+
+    // // for some reason HMR does not work properly. So liveReload is being used (hot has to be set to false to make liveReload work)
+    hot: false,
+    liveReload: true,
+    client: {
+      progress: true,
+    },
   },
 
   plugins: [
@@ -32,7 +38,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(?:js|mjs|cjs)$/,
+        test: /\.(?:js|mjs|cjs|jsx)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
