@@ -4,10 +4,13 @@
   "private": true,
   "dependencies": {
     "nodemon": "^3.1.0",
+    "postcss-loader": "^8.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-native": "^0.73.5",
     "react-router-dom": "^6.22.1",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "styled-components": "^6.1.8"
   },
   "scripts": {
     "start": "nodemon server/server.js",
@@ -42,6 +45,7 @@
     "css-loader": "^6.10.0",
     "html-webpack-plugin": "^5.6.0",
     "style-loader": "^3.3.4",
+    "tailwindcss": "^3.4.1",
     "webpack": "^5.90.3",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"

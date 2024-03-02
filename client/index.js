@@ -1,20 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import ErrorPage from "./error-page";
-import { createBrowserRouter, RouterProvider,Link} from "react-router-dom";
+import App from './components/App';
+import ErrorPage from "./components/ErrorPage";
+import MyMovies from './components/MyMovies'
+import { createBrowserRouter, RouterProvider, Link} from "react-router-dom";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    Component: App,
+    element: <App />,
     errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "mymovies",
+        element: <MyMovies />,
+      },
+    ],
   },
-  {
-    path: "about",
-    element: <div>hi</div>,
-  },
+  
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
