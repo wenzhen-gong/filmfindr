@@ -1,7 +1,11 @@
+import { useState } from 'react';
 import './App.css';
 import { Link } from "react-router-dom";
+import ReactQuestions from './components/ReactQuestions';
 
 function App() {
+  const [answers, setAnswers] = useState({});
+
   return (
     <div className="App">
       <header className="App-header">
@@ -16,6 +20,7 @@ function App() {
         >
           Learn React
         </a>
+        <ReactQuestions answers={answers} setAnswers={setAnswers} />
         <Link to="about">About Us</Link>
         <Link to="err">Error Page</Link>
       </header>
