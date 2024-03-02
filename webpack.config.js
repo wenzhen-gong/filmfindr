@@ -27,7 +27,7 @@ module.exports = {
   },
 
   plugins: [
-    new CleanWebpackPlugin(),
+    // new CleanWebpackPlugin(), //<-- deleting dist folder contents when running sever
     new HtmlWebpackPlugin({
       template: './client/index.html',
     }),
