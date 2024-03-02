@@ -15,6 +15,20 @@ app.get('/',
 }
 );
 
+app.post('/signup', 
+  //insert middleware here
+  (req, res) => {
+    return res.status(200).json(res.locals);
+  }
+);
+
+app.post('/signin', 
+  //insert middleware here
+  (req, res) => {
+    return res.status(200).json(res.locals);
+  }
+);
+
 
 app.use((err, req, res, next) => {
     const defaultErr = {
