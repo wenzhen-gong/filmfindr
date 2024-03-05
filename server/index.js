@@ -1,11 +1,12 @@
 const express = require('express');
 const path = require('path');
-
 const app = express();
 const PORT = 3000;
 
-app.use(express.json());
+const authController = require('./controllers/authController.js');
+const { auth } = require('./db.js');
 
+app.use(express.json());
 app.use('/', express.static(path.resolve(__dirname, '../dist')));
 
 
@@ -16,14 +17,14 @@ app.get('/',
 );
 
 app.post('/signup', 
-  //insert middleware here
+  authController.createUser,
   (req, res) => {
     return res.status(200).json(res.locals);
   }
 );
 
 app.post('/signin', 
-  //insert middleware here
+  authController.verifyUser,
   (req, res) => {
     return res.status(200).json(res.locals);
   }
