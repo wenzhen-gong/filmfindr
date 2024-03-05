@@ -150,9 +150,9 @@ const inputs = [
     const currentQuestion = inputs[currentQuestionIndex];
   
     return (
-      <div className='questions-container'>
-        <h1>Movie Recommendations</h1>
-        {currentQuestion && !currentQuestionIndex <= inputs.length - 1 && (
+      currentQuestion && currentQuestionIndex <= inputs.length - 1 && (
+        <div className='questions-container'>
+          <h1>Movie Recommendations</h1>
           <form onSubmit={handleNext}>
             <h3>{currentQuestion.question}</h3>
             {currentQuestion.type === 'text' ? (
@@ -178,11 +178,11 @@ const inputs = [
             {movieRec.length > 0 && <ul>{movieRec.map((movie, index) => <li key={index}>{movie} <button type='button' onClick={() => handleListDelete(index)}>X</button></li>)}</ul>}
             {error && <p>{error}</p>}
           </form>
-        )}
-        {answers && <p>{JSON.stringify(answers)}</p>}
-
-      </div>
+          
+          {answers && <p>{JSON.stringify(answers)}</p>}
+        </div>
+      )
     );
-  };
-  
+  }
+
   export default ReactQuestions;
