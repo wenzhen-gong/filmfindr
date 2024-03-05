@@ -101,16 +101,29 @@ const inputs = [
     const handleChange = (event) => {
       const { value, checked, type } = event.target;
       const name = `question_${currentQuestionIndex + 1}`;
-  
-      setAnswers(prevAnswers => ({
-        ...prevAnswers,
-        [name]: type === 'checkbox' ? { ...prevAnswers[name], [value]: checked } : value
-      }));
+    
+      if (type === 'checkbox') {
+        setAnswers(prevAnswers => {
+          const previousCheckedOptions = prevAnswers[name] || [];
+          const newCheckedOptions = checked
+            ? [...previousCheckedOptions, value]
+            : previousCheckedOptions.filter(option => option !== value);
+          return {
+            ...prevAnswers,
+            [name]: newCheckedOptions
+          };
+        });
+      } else {
+        setAnswers(prevAnswers => ({
+          ...prevAnswers,
+          [name]: value
+        }));
+      }
     };
 
     const handleList = (event) => {
       event.preventDefault();
-      if (!currentInput) {
+      if (!currentInput || currentInput.trim() === ''){
         setError('Please enter a movie');
         return;
       }
@@ -122,6 +135,16 @@ const inputs = [
         [name]: newMovieRec
       }));
       setCurrentInput('');
+    };
+
+    const handleListDelete = (index) => {
+      const newMovieRec = movieRec.filter((movie, i) => i !== index);
+      setMovieRec(newMovieRec);
+      const name = `question_${currentQuestionIndex + 1}`; 
+      setAnswers(prevAnswers => ({
+        ...prevAnswers,
+        [name]: newMovieRec
+      }));
     };
   
     const currentQuestion = inputs[currentQuestionIndex];
@@ -143,7 +166,7 @@ const inputs = [
                     name={`question_${currentQuestionIndex}`} 
                     value={option} 
                     onChange={handleChange} 
-                    checked={currentQuestion.type === 'checkbox' ? !!answers[`question_${currentQuestionIndex + 1}`]?.[option] : answers[`question_${currentQuestionIndex + 1}`] === option}
+                    checked={currentQuestion.type === 'checkbox' ? (answers[`question_${currentQuestionIndex + 1}`] || []).includes(option) : answers[`question_${currentQuestionIndex + 1}`] === option}
                   />
                   <label htmlFor={option}>{option}</label>
                 </div>
@@ -155,6 +178,7 @@ const inputs = [
             {error && <p>{error}</p>}
           </form>
         )}
+        {movieRec.length > 0 && <ul>{movieRec.map((movie, index) => <li key={index}>{movie} <button type='button' onClick={() => handleListDelete(index)}>X</button></li>)}</ul>}
         {answers && <p>{JSON.stringify(answers)}</p>}
 
       </div>
