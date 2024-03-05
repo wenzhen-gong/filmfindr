@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
-export const Button = styled.button`
+export const TopRightButton = styled.button`
   background-color: #3f51b5;
-  width: 50%;
+  width: 70%;
   color: white;
   padding: 5px 15px;
   border-radius: 5px;
@@ -22,7 +22,7 @@ export const Button = styled.button`
   }
 `;
 
-export const SignUpButton = styled.button`
+export const TopLeftButton = styled.button`
   background-color: #228B22;
   width: 15%;
   color: white;

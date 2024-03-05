@@ -1,9 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './components/App';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./components/App";
 import ErrorPage from "./components/ErrorPage";
-import MyMovies from './components/MyMovies'
-import { createBrowserRouter, RouterProvider, Link} from "react-router-dom";
+import MyMoviesContainer from "./components/MyMoviesContainer";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { store } from './utils/store'
+import { Provider } from "react-redux";
+import Home from "./components/Home";
 
 const router = createBrowserRouter([
   {
@@ -13,16 +16,19 @@ const router = createBrowserRouter([
     children: [
       {
         path: "mymovies",
-        element: <MyMovies />,
+        element: <MyMoviesContainer />,
+      },
+      {
+        path: "/",
+        element: <Home />,
       },
     ],
   },
-  
 ]);
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <RouterProvider router={router} />
-  </React.StrictMode>
+  </Provider>
 );
