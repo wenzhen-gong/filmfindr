@@ -81,7 +81,7 @@ const inputs = [
         return;
       }
       setError(null);
-      if (currentQuestionIndex < inputs.length - 1) {
+      if (currentQuestionIndex <= inputs.length - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
       }
     };
@@ -152,7 +152,7 @@ const inputs = [
     return (
       <div className='questions-container'>
         <h1>Movie Recommendations</h1>
-        {currentQuestion && (
+        {currentQuestion && !currentQuestionIndex <= inputs.length - 1 && (
           <form onSubmit={handleNext}>
             <h3>{currentQuestion.question}</h3>
             {currentQuestion.type === 'text' ? (
@@ -175,10 +175,10 @@ const inputs = [
             {currentQuestionIndex >= 0 && <button type="button" onClick={handlePrevious}>Back</button>}
             {currentQuestionIndex === 5 && <button type="button" onClick={handleList}>Add</button>}
             <button type="submit">Next</button>
+            {movieRec.length > 0 && <ul>{movieRec.map((movie, index) => <li key={index}>{movie} <button type='button' onClick={() => handleListDelete(index)}>X</button></li>)}</ul>}
             {error && <p>{error}</p>}
           </form>
         )}
-        {movieRec.length > 0 && <ul>{movieRec.map((movie, index) => <li key={index}>{movie} <button type='button' onClick={() => handleListDelete(index)}>X</button></li>)}</ul>}
         {answers && <p>{JSON.stringify(answers)}</p>}
 
       </div>
