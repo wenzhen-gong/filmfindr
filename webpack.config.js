@@ -51,7 +51,7 @@ module.exports = {
       },
       {
         test: /\.(css|sass|scss)$/,
-        // exclude: /node_modules/,
+        // excluding everything under node_modules except /bootstrap
         exclude: /node_modules(?!\/bootstrap)/,
         use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
       }
