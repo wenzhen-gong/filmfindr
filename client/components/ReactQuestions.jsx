@@ -63,8 +63,7 @@ const inputs = [
 
 
 
-  const ReactQuestions = ({answers, setAnswers}) => {
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const ReactQuestions = ({answers, setAnswers, setMovieData, currentQuestionIndex, setCurrentQuestionIndex}) => {
     const [movieRec, setMovieRec] = useState([]);
     const [currentInput, setCurrentInput] = useState('');
     const [error, setError] = useState(null);
@@ -81,8 +80,32 @@ const inputs = [
         return;
       }
       setError(null);
-      if (currentQuestionIndex <= inputs.length - 1) {
+      if (currentQuestionIndex < inputs.length - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
+      } else {
+        const sendAnswersToApi = async (answers) => {
+          try {
+            const response = await fetch('', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(answers),
+            });
+      
+            if (!response.ok) {
+              throw new Error('HTTP error ' + response.status);
+            }
+            const data = await response.json();
+            setMovieData(data);
+            
+          } catch (error) {
+            console.error('Failed to send answers:', error);
+          }
+        };
+        console.log(answers);
+        sendAnswersToApi(answers);
+        setCurrentQuestionIndex(currentQuestionIndex + 1)
       }
     };
 
@@ -146,14 +169,15 @@ const inputs = [
         [name]: newMovieRec
       }));
     };
-  
+
+
     const currentQuestion = inputs[currentQuestionIndex];
   
     return (
       currentQuestion && currentQuestionIndex <= inputs.length - 1 && (
         <div className='questions-container'>
-          <h1>Movie Recommendations</h1>
-          <form onSubmit={handleNext}>
+          <h1>Movie Questions</h1>
+          <form onSubmit={handleNext} name='questions'>
             <h3>{currentQuestion.question}</h3>
             {currentQuestion.type === 'text' ? (
               <input type="text" placeholder={currentQuestion.placeholder} value={currentInput} onChange={(e) => setCurrentInput(e.target.value)} />
