@@ -8,7 +8,7 @@ authController.createUser = async (req, res, next) => {
     try {
         console.log('------> authController.createUser START');
         // const { username, email, password } = req.body;
-        const username = 'user1';
+        const username = 'user';
         const email = 'email'
         const password = '123';
 
