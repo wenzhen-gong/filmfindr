@@ -24,7 +24,7 @@ module.exports = {
   },
 
   plugins: [
-    new CleanWebpackPlugin(),
+    // new CleanWebpackPlugin(), //<-- deleting dist folder contents when running sever
     new HtmlWebpackPlugin({
       template: './client/index.html',
     }),
@@ -32,7 +32,8 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].bundle.js',
+    filename: 'bundle.js',
+    publicPath: '/',
   },
 
   mode:'development',
