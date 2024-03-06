@@ -7,10 +7,10 @@ const authController = {};
 authController.createUser = async (req, res, next) => {
     try {
         console.log('------> authController.createUser START');
-        // const { username, password } = req.body;
-        const username = 'user';
+        // const { username, email, password } = req.body;
+        const username = 'user1';
+        const email = 'email'
         const password = '123';
-
 
         if (!username || !password) {
             next({
@@ -22,14 +22,15 @@ authController.createUser = async (req, res, next) => {
         }
 
         //query DB to check if user already exists
-        const { data, err } = await supabase
+        //let vs const because we're reassigning data to new query result data
+        let { data, error } = await supabase
             .from('Users')
             .select()
             .eq('UserName', username)
 
-        if (err) {
+        if (error) {
             next({
-                log: `authController.createUser - Supabase query/create error; ERROR: ${err}`,
+                log: `authController.createUser - Supabase query/create error; ERROR: ${error}`,
                 message: {
                     err: 'Error in authController.createUser; Check server logs'
                 }
@@ -49,14 +50,23 @@ authController.createUser = async (req, res, next) => {
                     })
                 }
                 //create user
-                await supabase
+                data = await supabase
                     .from('Users')
-                    .insert([ { UserName: username, Password: hash } ])
+                    .insert([ { UserName: username, Email: email, Password: hash } ])
+                    .select();
+
+
+                console.log('Data before res.locals assign:', data.data[0]);
+                res.locals.userData = data.data[0];
+                console.log('res.locals', res.locals.userData);
                 console.log('------> User successfully created... Maybe');
+                console.log('------> authController.createUser END')
             });
         } else {
             console.log('------> User already exists in database:', data);
-            next({
+            res.locals.userData = data[0];
+            console.log('------> authController.createUser END')
+            return next({
                 log: `authController.createUser - User already exists;`,
                 message: {
                     err: 'Error in authController.createUser; Check server logs'
@@ -64,7 +74,9 @@ authController.createUser = async (req, res, next) => {
             })
         }
 
-        console.log('------> authController.createUser END')
+        // console.log('Data before res.locals assign:', data);
+        // res.locals.userData = data;
+        // console.log('------> authController.createUser END')
         return next();
     } catch (err) {
         return next({
@@ -79,11 +91,11 @@ authController.createUser = async (req, res, next) => {
 authController.verifyUser = async (req, res, next) => {
     try {
         console.log('------> authController.verifyUser START');
-        // const { username, password } = req.body;
-        const username = 'user';
+        // const { email, password } = req.body;
+        const email = 'email'
         const password = '123';
 
-        if (!username || !password) {
+        if (!email || !password) {
             next({
                 log: `authController.verifyUser - missing input fields;`,
                 message: {
@@ -96,7 +108,7 @@ authController.verifyUser = async (req, res, next) => {
         const { data, err } = await supabase
             .from('Users')
             .select()
-            .eq('UserName', username)
+            .eq('Email', email)
 
         if (err) {
             next({
@@ -120,6 +132,7 @@ authController.verifyUser = async (req, res, next) => {
                 })
             } else {
                 console.log('------> authController.verifyUser - user VERIFIED');
+                res.locals.userData = data[0];
                 console.log('------> authController.verifyUser END');
                 return next();
             }

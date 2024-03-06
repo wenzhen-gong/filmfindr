@@ -4,7 +4,6 @@ const app = express();
 const PORT = 3000;
 
 const authController = require('./controllers/authController.js');
-const { auth } = require('./db.js');
 
 app.use(express.json());
 app.use('/', express.static(path.resolve(__dirname, '../dist')));
@@ -19,14 +18,14 @@ app.get('/',
 app.post('/signup', 
   authController.createUser,
   (req, res) => {
-    return res.status(200).json(res.locals);
+    return res.status(200).json(res.locals.userData);
   }
 );
 
 app.post('/signin', 
   authController.verifyUser,
   (req, res) => {
-    return res.status(200).json(res.locals);
+    return res.status(200).json(res.locals.userData);
   }
 );
 
