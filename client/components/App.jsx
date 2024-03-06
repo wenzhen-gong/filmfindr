@@ -5,10 +5,11 @@ import {
   handlelogIn,
   handlelogOut,
   openSignUpModal,
-  fetchUser,
+  openSignInModal,
 } from "../utils/filmfindrSlice";
 import { TopRightButton, TopLeftButton } from "./styledcomponents";
 import SignUpModal from "./SignUpModal";
+import SignInModal from "./SignInModal";
 import "./style.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -22,14 +23,16 @@ function App() {
       <div className="grid grid-cols-2 grid-rows-1">
         <div>
           {isLoggedIn ? (
-            "hi user"
+            <TopLeftButton onClick={() => dispatch(openSignInModal())}>
+              hi, {user.username}
+            </TopLeftButton>
           ) : (
             <>
               <TopLeftButton onClick={() => dispatch(openSignUpModal())}>
                 Sign Up
               </TopLeftButton>
-              <TopLeftButton onClick={() => dispatch(handlelogIn())}>
-                <Link to="/">Log In</Link>
+              <TopLeftButton onClick={() => dispatch(openSignInModal())}>
+                Log In
               </TopLeftButton>
               {/* <TopLeftButton
                 onClick={() =>
@@ -59,6 +62,8 @@ function App() {
         {/* <div>FOR TEST PURPOSE ONLY{user.name}</div> */}
       </div>
       <SignUpModal />
+      <SignInModal />
+
       <div>
         <Outlet />
       </div>

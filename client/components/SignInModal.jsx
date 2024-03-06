@@ -2,19 +2,19 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { useSelector, useDispatch } from "react-redux";
-import { closeSignUpModal, signUp } from "../utils/filmfindrSlice";
+import { closeSignInModal, signIn } from "../utils/filmfindrSlice";
 import React from "react";
 
-export default function SignUpModal() {
-  const showSignUpModal = useSelector((state) => state.myReducers.signUpModalOpen);
+export default function SignInModal() {
+  const showSignInModal = useSelector((state) => state.myReducers.signInModalOpen);
   const dispatch = useDispatch();
 
   return (
-    <Modal show={showSignUpModal} onHide={() => dispatch(closeSignUpModal())}>
+    <Modal show={showSignInModal} onHide={() => dispatch(closeSignInModal())}>
       <Modal.Header closeButton>
-        <Modal.Title>Sign Up for FilmFindr NOW!</Modal.Title>
+        <Modal.Title>Sign In Here</Modal.Title>
       </Modal.Header>
-      <Form onSubmit={(event) => dispatch(signUp(event))}>
+      <Form onSubmit={(event) => dispatch(signIn(event))}>
         <Modal.Body>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
@@ -35,12 +35,12 @@ export default function SignUpModal() {
         <Modal.Footer>
           <Button
             variant="secondary"
-            onClick={() => dispatch(closeSignUpModal())}
+            onClick={() => dispatch(closeSignInModal())}
           >
             Cancel
           </Button>
           <Button variant="primary" type="submit">
-            Sign Up
+            Sign In
           </Button>
         </Modal.Footer>
       </Form>
