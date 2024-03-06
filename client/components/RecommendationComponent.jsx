@@ -1,83 +1,56 @@
-import {useState} from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStar, faHeart} from '@fortawesome/free-solid-svg-icons'
-import '../App.css'
+import MovieRecommendationModal from './MovieRecomendationModal';
+import '../App.css';
 
 
 
-const RecommendationComponent = ({ answers }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [isHovered, setIsHovered] = useState(false); 
-  const [reviews, setReviews] = useState([]);
-  const [rating, setRating] = useState(0);
-  const [hover, setHover] = useState(0);
+const RecommendationComponent = ({ answers, setAnswers, movieData, setMovieData, setCurrentQuestionIndex }) => {
 
-  const handleFavorite = (event) => {
-    setIsFavorite(!isFavorite);
-  };
+  
+const resendAnswersToApi = async (answers) => {
+  try {
+    const response = await fetch('', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(answers),
+    });
 
-  const handleReview = (event) => {
-    event.preventDefault();
-    const review = event.target[0].value;
-    setReviews([...reviews, review]);
-    event.target[0].value = '';
-  };
+    if (!response.ok) {
+      throw new Error('HTTP error ' + response.status);
+    }
+    const data = await response.json();
+    setMovieData(data);
+    
+  } catch (error) {
+    console.error('Failed to send answers:', error);
+  }
+  console.log(answers);
+};
 
-  const handleReviewDelete = (index) => {
-    const newReviews = reviews.filter((review, i) => i !== index);
-    setReviews(newReviews);
-  };
-
+const resetRecommendations = () => {
+  setMovieData([]);
+  setAnswers({});
+  setCurrentQuestionIndex(0);
+};
 
 
 return (
-    <div>
-      <button>Reset Recommendations</button>
-      <h1>Movie Recommendations</h1>
-        <div className='recommendation-container'>
-        <FontAwesomeIcon
-          icon={faHeart}
-          color={isFavorite || isHovered ? 'red' : 'grey'}
-          onMouseEnter={() => setIsHovered(true)} 
-          onMouseLeave={() => setIsHovered(false)} 
-          onClick={handleFavorite}
-        />
-          <h3>Movie Title</h3>
-          <img alt='spiderman'/>
-          <form onSubmit={handleReview}>
-            <input type="text" placeholder="Add a review" />
-            <button type='submit'>Submit</button>
-            <p>Reviews:</p>
-            {reviews.length > 0 && <ul>{reviews.map((review, index) => <li key={index}>{review} <button type='button' onClick={() => handleReviewDelete(index)}>X</button></li>)}</ul>}
-          </form>
-          <div>
-        {[...Array(5)].map((star, i) => {
-          const ratingValue = i + 1;
-
-          return (
-            <label key={i}>
-              <input
-                type="radio"
-                name="rating"
-                value={ratingValue}
-                onClick={() => setRating(ratingValue)}
-                style={{ display: 'none' }}
-              />
-              <FontAwesomeIcon
-                icon={faStar}
-                color={ratingValue <= (hover || rating) ? "#ffc107" : "#e4e5e9"}
-                onMouseEnter={() => setHover(ratingValue)}
-                onMouseLeave={() => setHover(0)}
-              />
-            </label>
-          );
-        })}
-      </div>
+  <>
+    {movieData.length > 0 && (
+      <div>
+        <button onClick={() => resendAnswersToApi(answers)}>More Recommendations</button>
+        <h1>Movie Recommendations</h1>
+        <div className='recommendations-row'>
+          {movieData.map((movie, index) => (
+            <MovieRecommendationModal key={index} movie={movie} />
+          ))}
         </div>
-      <button>Looking for something different?</button>
-    </div>
-  
-  );
-};
+        <button onClick={resetRecommendations}>Looking for something different?</button>
+      </div>
+    )}
+  </>
+);
+}
 
 export default RecommendationComponent;
