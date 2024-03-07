@@ -17,6 +17,7 @@ function App() {
   const isLoggedIn = useSelector((state) => state.myReducers.isLoggedIn);
   const user = useSelector((state) => state.myReducers.user);
   const dispatch = useDispatch();
+  
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [movieData, setMovieData] = useState([{picture: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt4633694%2F&psig=AOvVaw', title: 'Spiderman',  genre: 'Action', description: 'A young Peter Parker/Spider',reason: 'good stuff'}, {picture: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt4633694%2F&psig=AOvVaw', title: 'Spiderman',  genre: 'Action', description: 'A young Peter Parker/Spider',reason: 'good stuff'}, {picture: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt4633694%2F&psig=AOvVaw', title: 'Spiderman',  genre: 'Action', description: 'A young Peter Parker/Spider',reason: 'good stuff'}]);

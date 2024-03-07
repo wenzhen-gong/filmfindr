@@ -1,18 +1,23 @@
 import {useState} from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import { handleFavorite } from '../utils/filmfindrSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar, faHeart} from '@fortawesome/free-solid-svg-icons'
-import '../App.css'
+import './style.css'
 
 const MovieRecommendationModal = ({ movie }) => {
+  const dispatch = useDispatch();
+  const isFavorite = useSelector(state => state.myReducers.isFavorite);
+
   const [isFavorite, setIsFavorite] = useState(false);
   const [isHovered, setIsHovered] = useState(false); 
   const [reviews, setReviews] = useState([]);
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
 
-  const handleFavorite = (event) => {
-    setIsFavorite(!isFavorite);
-  };
+  // const handleFavorite = (event) => {
+  //   setIsFavorite(!isFavorite);
+  // };
 
   const handleReview = (event) => {
     event.preventDefault();
@@ -33,11 +38,11 @@ const MovieRecommendationModal = ({ movie }) => {
         color={isFavorite || isHovered ? 'red' : 'grey'}
         onMouseEnter={() => setIsHovered(true)} 
         onMouseLeave={() => setIsHovered(false)} 
-        onClick={handleFavorite}
+        onClick={() => dispatch(handleFavorite())}
       />
       <h3>{movie.title}</h3>
       <img src={movie.image} alt={movie.title}/>
-      <form onSubmit={handleReview} name='recommendations'>
+      <form onSubmit={(event) => dispatch(handleReview(event))} name='recommendations'>
         <input type="text" placeholder="Add a review" />
         <button type='submit'>Submit</button>
         <p>Reviews:</p>

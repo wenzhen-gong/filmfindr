@@ -1,23 +1,34 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
+  // below are Wenzhen's states
   isLoggedIn: false,
   signUpModalOpen: false,
   signInModalOpen: false,
   user: null,
   movies: [],
   loadingMovies: 'idle',
+
+  // below are David's states
+  answers: {},
+  currentQuestionIndex: 0,
+  movieData: [{picture: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt4633694%2F&psig=AOvVaw', title: 'Spiderman',  genre: 'Action', description: 'A young Peter Parker/Spider',reason: 'good stuff'}, {picture: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt4633694%2F&psig=AOvVaw', title: 'Spiderman',  genre: 'Action', description: 'A young Peter Parker/Spider',reason: 'good stuff'}, {picture: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt4633694%2F&psig=AOvVaw', title: 'Spiderman',  genre: 'Action', description: 'A young Peter Parker/Spider',reason: 'good stuff'}],
+  isFavorite: false,
+  isHovered: false,
+  reviews: [],
+  rating: 0,
+  hover: 0,
 };
 
 export const filmfindrSlice = createSlice({
   name: "myReducers",
   initialState,
   reducers: {
-    handlelogIn: (state) => {
-      // other logics need to be written like authorization
-      state.isLoggedIn = true;
-      console.log("mimicing logging in");
-    },
+    // handlelogIn: (state) => {
+    //   // other logics need to be written like authorization
+    //   state.isLoggedIn = true;
+    //   console.log("mimicing logging in");
+    // },
     handlelogOut: (state) => {
       // other logics need to be written like clear cookies and/or jwt
       state.isLoggedIn = false;
@@ -36,6 +47,12 @@ export const filmfindrSlice = createSlice({
     closeSignInModal: (state) => {
       state.signInModalOpen = false;
     },
+
+    // below are David's synchronous reducers
+    handleFavorite: state => {
+      state.isFavorite = !state.isFavorite;
+    },
+
   },
   extraReducers(builder) {
     builder.addCase(signIn.fulfilled, (state, action) => {
@@ -59,7 +76,7 @@ export const filmfindrSlice = createSlice({
   },
   
 });
-export const { handlelogIn, handlelogOut, openSignUpModal, closeSignUpModal, openSignInModal, closeSignInModal } =
+export const { handlelogOut, openSignUpModal, closeSignUpModal, openSignInModal, closeSignInModal, handleFavorite } =
   filmfindrSlice.actions;
 export default filmfindrSlice.reducer;
 

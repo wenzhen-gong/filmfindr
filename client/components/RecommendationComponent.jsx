@@ -1,5 +1,5 @@
 import MovieRecommendationModal from './MovieRecomendationModal';
-import '../App.css';
+import './style.css';
 
 
 
