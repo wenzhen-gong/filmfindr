@@ -27,3 +27,35 @@ body::after {
   left: 0;
   z-index: -1;   
 }
+
+.questions-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: white 1px solid;
+  border-radius: 10px;
+  padding: 100px;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.recommendation-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: white 1px solid;
+  border-radius: 10px;
+  margin: auto;
+  padding: 50px;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.recommendations-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; 
+  /* flex-wrap: wrap; */
+}

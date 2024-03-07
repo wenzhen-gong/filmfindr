@@ -2,6 +2,21 @@ import React from 'react'
 
 export default function Home() {
   return (
-    <div>Question & Recommendation components renders here</div>
+    <div>
+      <ReactQuestions 
+          answers={answers} 
+          setAnswers={setAnswers} 
+          setMovieData={setMovieData} 
+          currentQuestionIndex={currentQuestionIndex}
+          setCurrentQuestionIndex={setCurrentQuestionIndex}
+          />
+        <RecommendationComponent 
+          answers={answers}
+          setAnswers={setAnswers} 
+          movieData={movieData} 
+          setMovieData={setMovieData}
+          setCurrentQuestionIndex={setCurrentQuestionIndex}
+          />
+    </div>
   )
 }
