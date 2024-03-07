@@ -7,6 +7,7 @@ const initialState = {
   user: null,
   movies: [],
   loadingMovies: 'idle',
+  teststate: null
 };
 
 export const filmfindrSlice = createSlice({
@@ -36,6 +37,16 @@ export const filmfindrSlice = createSlice({
     closeSignInModal: (state) => {
       state.signInModalOpen = false;
     },
+    testreducer: {
+      reducer:(state, action) => {
+        console.log(action.payload)
+        state.isLoggedIn = true;
+      state.signInModalOpen = false;
+      state.user = action.payload;
+
+      },
+      prepare: (event) => ({ payload: event.target[0].value}),
+    }
   },
   extraReducers(builder) {
     builder.addCase(signIn.fulfilled, (state, action) => {
@@ -59,7 +70,7 @@ export const filmfindrSlice = createSlice({
   },
   
 });
-export const { handlelogIn, handlelogOut, openSignUpModal, closeSignUpModal, openSignInModal, closeSignInModal } =
+export const { handlelogIn, handlelogOut, openSignUpModal, closeSignUpModal, openSignInModal, closeSignInModal, testreducer } =
   filmfindrSlice.actions;
 export default filmfindrSlice.reducer;
 
