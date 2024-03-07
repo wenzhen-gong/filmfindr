@@ -5,6 +5,8 @@ const initialState = {
   signUpModalOpen: false,
   signInModalOpen: false,
   user: null,
+  movies: null,
+  loadingMovies:false,
 };
 
 export const filmfindrSlice = createSlice({
@@ -19,6 +21,7 @@ export const filmfindrSlice = createSlice({
     handlelogOut: (state) => {
       // other logics need to be written like clear cookies and/or jwt
       state.isLoggedIn = false;
+      state.user = null;
       console.log("mimicing logging out");
     },
     openSignUpModal: (state) => {
@@ -39,6 +42,15 @@ export const filmfindrSlice = createSlice({
       state.isLoggedIn = true;
       state.signInModalOpen = false;
       state.user = action.payload;
+    });
+
+    builder.addCase(fetchMovies.fulfilled, (state, action) => {
+      state.loadingMovies = false;
+      state.movies = action.payload;
+      console.log(state.movies)
+    });
+    builder.addCase(fetchMovies.pending, (state) => {
+      state.loadingMovies = true;
     });
   },
   
@@ -61,4 +73,12 @@ export const signIn = createAsyncThunk("signIn", async (event) => {
   let response = await fetch("https://swapi.dev/api/people/1");
   response = await response.json();
   return {username:'fakename'};
+});
+
+export const fetchMovies = createAsyncThunk("fetchMovies", async () => {
+  // need to change to fetch movies logic (db call with select)
+  let response = await fetch("https://swapi.dev/api/people/1");
+  response = await response.json();
+  console.log('fetching movies')
+  return 'fakemovie';
 });
