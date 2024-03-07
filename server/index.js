@@ -1,11 +1,26 @@
 const express = require('express');
 const path = require('path');
+const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const PORT = 3000;
 
 const authController = require('./controllers/authController.js');
+const cookieController = require('./controllers/cookieController.js');
 
+const MONGO_URI = 'mongodb+srv://jaycruz2905:codesmith@reinforcement.vyfuoyn.mongodb.net/?retryWrites=true&w=majority&appName=Reinforcement';
+
+mongoose.connect(MONGO_URI, {
+  dbName: 'Reinforcement',
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+  .then(() => console.log('-------> Connected to Mongo DB.'))
+  .catch(err => console.log(err));
+
+
+app.use(cookieParser());
 app.use(express.json());
 app.use('/', express.static(path.resolve(__dirname, '../dist')));
 
@@ -18,6 +33,7 @@ app.get('/',
 
 app.post('/signup', 
   authController.createUser,
+  cookieController.setSSIDCookie,
   (req, res) => {
     return res.status(200).json(res.locals.userData);
   }
@@ -29,6 +45,12 @@ app.post('/signin',
     return res.status(200).json(res.locals.userData);
   }
 );
+
+// app.post('/signout', 
+//   (req, res) => {
+//     return res.status(200).send('Signed out successfully');
+//   }
+// );
 
 
 app.use((err, req, res, next) => {

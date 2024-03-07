@@ -72,9 +72,6 @@ authController.createUser = async (req, res, next) => {
             })
         }
 
-        // console.log('Data before res.locals assign:', data);
-        // res.locals.userData = data;
-        // console.log('------> authController.createUser END')
         return next();
     } catch (err) {
         return next({
