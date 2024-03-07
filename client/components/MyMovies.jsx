@@ -4,16 +4,14 @@ import { fetchMovies } from "../utils/filmfindrSlice";
 export default function MyMovies() {
   const dispatch = useDispatch();
   const movies = useSelector((state) => state.myReducers.movies);
-  // const loadingMovies = useSelector((state) => state.myReducers.loadingMovies);
-  // console.log('loadingMovies: ', loadingMovies)
+  const loadingMovies = useSelector((state) => state.myReducers.loadingMovies);
 
   // console.log('movies: ', movies)
   useEffect(() => {
-    dispatch(fetchMovies());
+    if (loadingMovies === "idle") dispatch(fetchMovies());
+  }, [loadingMovies, dispatch]);
+  if(loadingMovies === "idle") return <div>idle...</div>;
+  if(loadingMovies === "loading") return <div>loading...</div>;
 
-  }, []);
-
-  // if (loadingMovies) return <p>Loading...</p>;
-
-  return <div>{movies}</div>;
+  return <div>{movies[0].moviename}</div>;
 }

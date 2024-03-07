@@ -5,8 +5,8 @@ const initialState = {
   signUpModalOpen: false,
   signInModalOpen: false,
   user: null,
-  movies: null,
-  loadingMovies:false,
+  movies: [],
+  loadingMovies: 'idle',
 };
 
 export const filmfindrSlice = createSlice({
@@ -44,14 +44,18 @@ export const filmfindrSlice = createSlice({
       state.user = action.payload;
     });
 
+    builder.addCase(fetchMovies.pending, (state, action) => {
+      state.loadingMovies = 'loading';
+    });
     builder.addCase(fetchMovies.fulfilled, (state, action) => {
-      state.loadingMovies = false;
-      state.movies = action.payload;
-      console.log(state.movies)
+      state.loadingMovies = 'succeeded';
+      state.movies = state.movies.concat(action.payload)
     });
-    builder.addCase(fetchMovies.pending, (state) => {
-      state.loadingMovies = true;
-    });
+    // .addCase(builder.rejected, (state, action) => {
+    //   state.loadingMovies = 'failed';
+    //   state.error = action.error.message
+    // })
+
   },
   
 });
@@ -80,5 +84,5 @@ export const fetchMovies = createAsyncThunk("fetchMovies", async () => {
   let response = await fetch("https://swapi.dev/api/people/1");
   response = await response.json();
   console.log('fetching movies')
-  return 'fakemovie';
+  return {moviename: 'fakemovie'};
 });
