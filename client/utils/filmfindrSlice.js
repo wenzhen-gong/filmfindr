@@ -18,6 +18,7 @@ const initialState = {
   reviews: [],
   rating: 0,
   hover: 0,
+  teststate: null
 };
 
 export const filmfindrSlice = createSlice({
@@ -47,6 +48,16 @@ export const filmfindrSlice = createSlice({
     closeSignInModal: (state) => {
       state.signInModalOpen = false;
     },
+    testreducer: {
+      reducer:(state, action) => {
+        console.log(action.payload)
+        state.isLoggedIn = true;
+      state.signInModalOpen = false;
+      state.user = action.payload;
+
+      },
+      prepare: (event) => ({ payload: event.target[0].value}),
+    }
 
     // below are David's synchronous reducers
     handleFavorite: state => {
@@ -76,7 +87,7 @@ export const filmfindrSlice = createSlice({
   },
   
 });
-export const { handlelogOut, openSignUpModal, closeSignUpModal, openSignInModal, closeSignInModal, handleFavorite } =
+export const { handlelogOut, openSignUpModal, closeSignUpModal, openSignInModal, closeSignInModal, testreducer, handleFavorite } =
   filmfindrSlice.actions;
 export default filmfindrSlice.reducer;
 
