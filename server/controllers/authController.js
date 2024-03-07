@@ -8,7 +8,7 @@ authController.createUser = async (req, res, next) => {
     try {
         console.log('------> authController.createUser START');
         // const { username, email, password } = req.body;
-        const username = 'user';
+        const username = 'user1';
         const email = 'email'
         const password = '123';
 
@@ -55,10 +55,14 @@ authController.createUser = async (req, res, next) => {
                     .insert([ { UserName: username, Email: email, Password: hash } ])
                     .select();
 
-                res.locals.userData = data.data[0];
+                // console.log(data);
+                const userData = data.data[0]
+                const resData = { userId: userData.UserID, username: userData.UserName, email: userData.Email }
+                res.locals.userData = resData;
                 console.log('res.locals', res.locals.userData);
                 console.log('------> User successfully created... Maybe');
                 console.log('------> authController.createUser END')
+                return next();
             });
         } else {
             console.log('------> User already exists in database:', data);
@@ -72,7 +76,7 @@ authController.createUser = async (req, res, next) => {
             })
         }
 
-        return next();
+        
     } catch (err) {
         return next({
             log: `authController.createUser - querying database for users error; ERROR: ${err}`,

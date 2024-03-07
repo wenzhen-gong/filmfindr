@@ -27,9 +27,12 @@ cookieController.setSSIDCookie = async (req, res, next) => {
 
         const userID = data[0].UserID;
         const userN = data[0].UserName;
-        res.cookie('ssid', userID, {httpOnly: true});
-        res.cookie('u', userN, {httpOnly: true});
+        await res.cookie('ssid', userID, {httpOnly: true});
+        await res.cookie('u', userN, {httpOnly: true});
+        req.cookies.ssid = userID;
         console.log('------> SSID cookie set! Cookie:', userID);
+        console.log('------> U cookie set! Cookie:', userN);
+        // console.log('------> res.cookie', res.cookies);
         console.log('------> cookieController.setSSIDCookie END');
         return next();
     } catch (err) {

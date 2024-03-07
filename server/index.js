@@ -8,15 +8,16 @@ const PORT = 3000;
 
 const authController = require('./controllers/authController.js');
 const cookieController = require('./controllers/cookieController.js');
+const sessionController = require('./controllers/sessionController.js');
 
 const MONGO_URI = 'mongodb+srv://jaycruz2905:codesmith@reinforcement.vyfuoyn.mongodb.net/?retryWrites=true&w=majority&appName=Reinforcement';
 
 mongoose.connect(MONGO_URI, {
   dbName: 'Reinforcement',
-  useNewUrlParser: true,
-  useUnifiedTopology: true
+  // useNewUrlParser: true,
+  // useUnifiedTopology: true
 })
-  .then(() => console.log('-------> Connected to Mongo DB.'))
+  .then(() => console.log('------> Connected to Mongo DB.'))
   .catch(err => console.log(err));
 
 
@@ -34,6 +35,7 @@ app.get('/',
 app.post('/signup', 
   authController.createUser,
   cookieController.setSSIDCookie,
+  sessionController.createSession,
   (req, res) => {
     return res.status(200).json(res.locals.userData);
   }
