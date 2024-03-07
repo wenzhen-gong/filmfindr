@@ -55,8 +55,6 @@ authController.createUser = async (req, res, next) => {
                     .insert([ { UserName: username, Email: email, Password: hash } ])
                     .select();
 
-
-                console.log('Data before res.locals assign:', data.data[0]);
                 res.locals.userData = data.data[0];
                 console.log('res.locals', res.locals.userData);
                 console.log('------> User successfully created... Maybe');
