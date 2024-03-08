@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import './style.css';
 
 
 const inputs = [
@@ -175,15 +176,15 @@ const inputs = [
   
     return (
       currentQuestion && currentQuestionIndex <= inputs.length - 1 && (
-        <div className='questions-container'>
-          <h1>Movie Questions</h1>
-          <form onSubmit={handleNext} name='questions'>
-            <h3>{currentQuestion.question}</h3>
+        <div className='flex flex-col items-center justify-center'>
+          <h1 className='text-4xl font-bold mb-8'>Movie Questions</h1>
+          <form onSubmit={handleNext} name='questions' className='w-full max-w-md bg-white p-6 rounded shadow-md'>
+            <h3 className='flex items-align text-xl font-semibold mb-4'>{currentQuestion.question}</h3>
             {currentQuestion.type === 'text' ? (
-              <input type="text" placeholder={currentQuestion.placeholder} value={currentInput} onChange={(e) => setCurrentInput(e.target.value)} />
+              <input type="text" placeholder={currentQuestion.placeholder} value={currentInput} onChange={(e) => setCurrentInput(e.target.value)} className='w-full p-2 border border-gray-300 rounded mb-4' />
             ) : (
               currentQuestion.options.map((option, index) => (
-                <div key={index}>
+                <div key={index} className='flex items-center mb-2'>
                   <input 
                     type={currentQuestion.type} 
                     id={option} 
@@ -191,19 +192,22 @@ const inputs = [
                     value={option} 
                     onChange={handleChange} 
                     checked={currentQuestion.type === 'checkbox' ? (answers[`question_${currentQuestionIndex + 1}`] || []).includes(option) : answers[`question_${currentQuestionIndex + 1}`] === option}
+                    className='mr-2'
                   />
-                  <label htmlFor={option}>{option}</label>
+                  <label htmlFor={option} className='text-gray-700'>{option}</label>
                 </div>
               ))
             )}
-            {currentQuestionIndex >= 0 && <button type="button" onClick={handlePrevious}>Back</button>}
-            {currentQuestionIndex === 5 && <button type="button" onClick={handleList}>Add</button>}
-            <button type="submit">Next</button>
-            {movieRec.length > 0 && <ul>{movieRec.map((movie, index) => <li key={index}>{movie} <button type='button' onClick={() => handleListDelete(index)}>X</button></li>)}</ul>}
-            {error && <p>{error}</p>}
+            <div className='flex justify-between'>
+              {currentQuestionIndex >= 0 && <button type="button" onClick={handlePrevious} className='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'>Back</button>}
+              {currentQuestionIndex === 5 && <button type="button" onClick={handleList} className='px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600'>Add</button>}
+              <button type="submit" className='px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600'>Next</button>
+            </div>
+            {movieRec.length > 0 && <ul className='mt-4'>{movieRec.map((movie, index) => <li key={index} className='flex justify-between items-center border-b py-2'>{movie} <button type='button' onClick={() => handleListDelete(index)} className='px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600'>X</button></li>)}</ul>}
+            {error && <p className='text-red-500 mt-2'>{error}</p>}
           </form>
           
-          {answers && <p>{JSON.stringify(answers)}</p>}
+          {answers && <p className='mt-4 text-center'>{JSON.stringify(answers)}</p>}
         </div>
       )
     );

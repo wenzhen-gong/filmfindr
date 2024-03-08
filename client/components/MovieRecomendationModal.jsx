@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar, faHeart} from '@fortawesome/free-solid-svg-icons'
-import '../App.css'
+import './style.css';
 
 const MovieRecommendationModal = ({ movie }) => {
   const [isFavorite, setIsFavorite] = useState(false);
@@ -27,23 +27,23 @@ const MovieRecommendationModal = ({ movie }) => {
   };
 
   return (
-    <div className='recommendation-container'>
+    <div className='flex flex-col items-center p-4 bg-white rounded shadow'>
       <FontAwesomeIcon
         icon={faHeart}
-        color={isFavorite || isHovered ? 'red' : 'grey'}
+        className={`text-lg cursor-pointer ${isFavorite || isHovered ? 'text-red-500' : 'text-gray-500'}`}
         onMouseEnter={() => setIsHovered(true)} 
         onMouseLeave={() => setIsHovered(false)} 
         onClick={handleFavorite}
       />
-      <h3>{movie.title}</h3>
-      <img src={movie.image} alt={movie.title}/>
-      <form onSubmit={handleReview} name='recommendations'>
-        <input type="text" placeholder="Add a review" />
-        <button type='submit'>Submit</button>
-        <p>Reviews:</p>
-        {reviews.length > 0 && <ul>{reviews.map((review, index) => <li key={index}>{review} <button type='button' onClick={() => handleReviewDelete(index)}>X</button></li>)}</ul>}
+      <h3 className='mt-2 text-xl font-bold'>{movie.title}</h3>
+      <img className='mt-2 rounded' src={movie.image} alt={movie.title}/>
+      <form className='mt-2 w-full' onSubmit={handleReview} name='recommendations'>
+        <input className='w-full p-2 border rounded' type="text" placeholder="Add a review" />
+        <button className='mt-2 w-full p-2 hover:bg-blue-700 bg-blue-500 text-white rounded' type='submit'>Submit</button>
+        <p className='mt-2 font-bold'>Reviews:</p>
+        {reviews.length > 0 && <ul className='mt-2'>{reviews.map((review, index) => <li className='flex justify-between mt-1' key={index}>{review} <button className='ml-2 text-red-500' type='button' onClick={() => handleReviewDelete(index)}>X</button></li>)}</ul>}
       </form>
-      <div>
+      <div className='flex mt-2'>
         {[...Array(5)].map((star, i) => {
           const ratingValue = i + 1;
 
@@ -54,11 +54,11 @@ const MovieRecommendationModal = ({ movie }) => {
                 name="rating"
                 value={ratingValue}
                 onClick={() => setRating(ratingValue)}
-                style={{ display: 'none' }}
+                className='sr-only'
               />
               <FontAwesomeIcon
                 icon={faStar}
-                color={ratingValue <= (hover || rating) ? "#ffc107" : "#e4e5e9"}
+                className={`mr-1 cursor-pointer ${ratingValue <= (hover || rating) ? "text-yellow-400" : "text-gray-300"}`}
                 onMouseEnter={() => setHover(ratingValue)}
                 onMouseLeave={() => setHover(0)}
               />
