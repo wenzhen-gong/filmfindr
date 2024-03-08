@@ -114,17 +114,18 @@ export const filmfindrSlice = createSlice({
           ...state.answers,
           [name]: newCheckedOptions,
         };
-      } else if(action.payload.type && action.payload.type !== "checkbox"){
+      } else if (action.payload.type && action.payload.type !== "checkbox") {
         state.answers = {
           ...state.answers,
           [name]: action.payload.value,
         };
-      }
-      else{
+      } else if (Array.isArray(action.payload)) {
         state.answers = {
           ...state.answers,
           [name]: action.payload,
         };
+      } else {
+        state.answers = {};
       }
     },
 
@@ -141,7 +142,9 @@ export const filmfindrSlice = createSlice({
         );
       }
     },
-
+    resetMovieData: (state) => {
+      state.movieData = [];
+    },
     // maybe for each movie?
     handleFavorite: (state) => {
       state.isFavorite = !state.isFavorite;
@@ -194,7 +197,7 @@ export const filmfindrSlice = createSlice({
       state.movieData = action.payload;
     });
     builder.addCase(sendAnswersToApi.rejected, (state, action) => {
-      console.error("Failed to send answers:", action.payload.errorMessage);
+      console.error("Failed to send answers:", action.payload);
     });
   },
 });
@@ -211,6 +214,7 @@ export const {
   setAnswers,
   setCurrentInput,
   setMovieRec,
+  resetMovieData,
 
   handleFavorite,
   handleReview,
@@ -261,7 +265,7 @@ export const sendAnswersToApi = createAsyncThunk(
       const data = await response.json();
       return data;
     } catch (err) {
-      return rejectWithValue(err.response.data);
+      return rejectWithValue(err.message);
     }
   }
 );

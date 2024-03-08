@@ -11,13 +11,13 @@ export default function Home() {
         // currentQuestionIndex={currentQuestionIndex}
         // setCurrentQuestionIndex={setCurrentQuestionIndex}
       />
-      {/* <RecommendationComponent
-        answers={answers}
-        setAnswers={setAnswers}
-        movieData={movieData}
-        setMovieData={setMovieData}
-        setCurrentQuestionIndex={setCurrentQuestionIndex}
-      /> */}
+      <RecommendationComponent
+        // answers={answers}
+        // setAnswers={setAnswers}
+        // movieData={movieData}
+        // setMovieData={setMovieData}
+        // setCurrentQuestionIndex={setCurrentQuestionIndex}
+      />
     </div>
   );
 }

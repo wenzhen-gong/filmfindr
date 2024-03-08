@@ -19,7 +19,7 @@ const MovieRecommendationModal = ({ movie }) => {
   const isHovered = useSelector(state => state.myReducers.isHovered);
   const hover = useSelector(state => state.myReducers.hover);
   const rating = useSelector(state => state.myReducers.rating);
-
+const [isWatched, setIsWatched] = useState(false);
   // const handleFavorite = (event) => {
   //   setIsFavorite(!isFavorite);
   // };
@@ -37,6 +37,11 @@ const MovieRecommendationModal = ({ movie }) => {
   //   setReviews(newReviews);
   // };
 
+  const handleWatched = (event) => {
+    setIsWatched(!isWatched);
+    setReviews([]);
+    setRating(0);
+  }
   return (
     <div className="recommendation-container">
       <FontAwesomeIcon
