@@ -9,7 +9,7 @@ authController.createUser = async (req, res, next) => {
         console.log('------> authController.createUser START');
         // const { username, email, password } = req.body;
         const username = 'user1';
-        const email = 'email'
+        const email = 'email1'
         const password = '123';
 
         if (!username || !password) {
@@ -26,7 +26,7 @@ authController.createUser = async (req, res, next) => {
         let { data, error } = await supabase
             .from('Users')
             .select()
-            .eq('UserName', username)
+            .eq('Email', email)
 
         if (error) {
             next({
@@ -58,7 +58,6 @@ authController.createUser = async (req, res, next) => {
                 // console.log(data);
                 const userData = data.data[0]
                 res.locals.userData = { userId: userData.UserID, username: userData.UserName, email: userData.Email };
-                res.locals.userStats = { signedIn: true };
                 console.log('res.locals', res.locals.userData);
                 console.log('------> User successfully created... Maybe');
                 console.log('------> authController.createUser END')
@@ -75,8 +74,6 @@ authController.createUser = async (req, res, next) => {
                 }
             })
         }
-
-        
     } catch (err) {
         return next({
             log: `authController.createUser - querying database for users error; ERROR: ${err}`,
@@ -91,7 +88,7 @@ authController.verifyUser = async (req, res, next) => {
     try {
         console.log('------> authController.verifyUser START');
         // const { email, password } = req.body;
-        const email = 'email'
+        const email = 'email1'
         const password = '123';
 
         if (!email || !password) {
@@ -132,7 +129,6 @@ authController.verifyUser = async (req, res, next) => {
             } else {
                 const userData = data[0];
                 res.locals.userData = { userId: userData.UserID, userName: userData.UserName, Email: userData.Email };
-                res.locals.userStatus = { signedIn: true }
                 console.log('res.locals', res.locals.userData);
                 console.log('------> authController.verifyUser - user VERIFIED');
                 console.log('------> authController.verifyUser END');

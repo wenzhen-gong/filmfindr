@@ -9,6 +9,7 @@ const PORT = 3000;
 const authController = require('./controllers/authController.js');
 const cookieController = require('./controllers/cookieController.js');
 const sessionController = require('./controllers/sessionController.js');
+const movieController = require('./controllers/movieController.js');
 
 const MONGO_URI = 'mongodb+srv://jaycruz2905:codesmith@reinforcement.vyfuoyn.mongodb.net/?retryWrites=true&w=majority&appName=Reinforcement';
 
@@ -25,9 +26,9 @@ app.use('/', express.static(path.resolve(__dirname, '../dist')));
 
 
 app.get('/',
-(req, res) => {
-  return res.status(200).sendFile(path.join(__dirname, '../../dist/index.html'));
-}
+  (req, res) => {
+    return res.status(200).sendFile(path.join(__dirname, '../../dist/index.html'));
+  }
 );
 
 app.post('/signup', 
@@ -54,6 +55,21 @@ sessionController.deleteSession,
     return res.status(200).json(res.locals);
   }
 );
+
+app.get('/mymovies',
+  movieController.fetchMovies,
+  (req, res) => {
+    return res.status(200).json(res.locals);
+  }
+);
+
+app.post('/mymovies',
+  movieController.saveMovie,
+  (req, res) => {
+    return res.status(200).json(res.locals);
+  }
+);
+
 
 
 app.use((err, req, res, next) => {

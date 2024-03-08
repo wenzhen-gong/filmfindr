@@ -6,7 +6,7 @@ cookieController.setSSIDCookie = async (req, res, next) => {
     try {
         console.log('------> cookieController.setSSIDCookie START');
         // const { email, password } = req.body;
-        const email = 'email';
+        const email = 'email1';
         const password = '123';
         if (!email || !password ) throw new Error('ERROR: No email or password input');
 
