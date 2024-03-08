@@ -44,7 +44,7 @@ movieController.saveMovie = async (req, res, next) => {
         // const { userId, email, movieTitle } = req.body;
         const userId = 78;
         const email = 'email1';
-        const movieTitle = 'FakeMovie 1231231231';
+        const movieTitle = 'FakeMovie 23';
 
         if (!email || !movieTitle) throw new Error('ERROR: No email, movieTitle, or userId from req.body to query DB with');
 
@@ -53,6 +53,15 @@ movieController.saveMovie = async (req, res, next) => {
             .from('Users')
             .select()
             .eq('Email', email)
+
+        if (error) {
+            next({
+                log: `movieController.saveMovie - Supabase query/create error; ERROR: ${error}`,
+                message: {
+                    err: 'Error in movieController.saveMovie; Check server logs'
+                }
+            })
+        }
 
         const userData = data[0]
         const userMovies = userData.MyMovies;
@@ -118,6 +127,120 @@ movieController.saveMovie = async (req, res, next) => {
             log: `movieController.saveMovie - writing to database for movies error; ERROR: ${err}`,
             message: {
               err: 'Error in movieController.saveMovie; Check server logs',
+            },
+        });
+    }
+}
+
+movieController.updateMovie = async (req, res, next) => {
+    try {
+        console.log('------> movieController.updateMovie START');
+        // const { userId, movieTitle, stars, review } = req.body;
+        const userId = 78;
+        const movieTitle = 'FakeMovie 2';
+        const stars = 3;
+        const review = 'This was trash';
+
+        if (!userId || !movieTitle) throw new Error('ERROR: movieTitle, or userId from req.body to query DB with');
+
+        let {data, error} = await supabase
+            .from('Movies')
+            .update({ Stars: stars, Review: review})
+            .match({ MovieTitle: movieTitle, UserID: userId, })
+            .select();
+
+        if (error) {
+            next({
+                log: `movieController.updateMovie - Supabase query/create error; ERROR: ${error}`,
+                message: {
+                    err: 'Error in movieController.updateMovie; Check server logs'
+                }
+            })
+        }
+
+        console.log('updated movie data with review/rating: ',data[0]);
+        res.locals.updatedMovie = data[0];
+        console.log('------> movieController.updateMovie END');
+        return next();
+    } catch (err) {
+        return next({
+            log: `movieController.updateMovie - writing to database for movies error; ERROR: ${err}`,
+            message: {
+              err: 'Error in movieController.updateMovie; Check server logs',
+            },
+        });
+    }
+}
+
+movieController.deleteMovie = async (req, res, next) => {
+    try {
+        console.log('------> movieController.deleteMovie START');
+        // const { userId, email, movieTitle } = req.body;
+        const userId = 78;
+        const email = 'email1';
+        const movieTitle = 'FakeMovie 21';
+
+        if (!email || !movieTitle) throw new Error('ERROR: No email, movieTitle, or userId from req.body to query DB with');
+
+        //check to see if user has already saved movie
+        let { data, error } = await supabase
+            .from('Users')
+            .select()
+            .eq('Email', email)
+
+        if (error) {
+            next({
+                log: `movieController.deleteMovie - Supabase query/create error; ERROR: ${error}`,
+                message: {
+                    err: 'Error in movieController.deleteMovie; Check server logs'
+                }
+            })
+        }
+
+        const userData = data[0]
+        const userMovies = userData.MyMovies;
+
+        async function helperFuncDeleteMovie(userId, movieTitle) {
+            //write to Movies table to save movie
+            await supabase
+                .from('Movies')
+                .delete()
+                .match({ MovieTitle: movieTitle, UserID: userId });
+        }
+
+        //if userMovies is null (user has no movies saved)
+        if (userMovies === null || userMovies.length === 0) {
+            console.log('User has not saved movie to delete');
+            console.log('------> movieController.deleteMovie END');
+            return next();
+        }
+        
+        const newMoviesArr = [];
+        //parse userMovies and check for movie, if found/saved, return error/notify
+        for (let i = 0; i < userMovies.length; i++) {
+            if (userMovies[i] === movieTitle) {
+                continue;
+            }
+            newMoviesArr.push(userMovies[i]);
+        }
+
+        data = await supabase
+            .from('Users')
+            .update([ { MyMovies: newMoviesArr } ])
+            .eq('Email', email)
+            .select();
+
+        // console.log(data.data[0]);
+        console.log('New Data after delete movies array', data.data[0]);
+
+        helperFuncDeleteMovie(userId, movieTitle);
+        console.log('------> movieController.deleteMovie END');
+        return next();
+    } catch (err) {
+        return next({
+            log: `movieController.deleteMovie - writing to database for movies error; ERROR: ${err}`,
+            message: {
+              err: 'Error in movieController.deleteMovie; Check server logs',
             },
         });
     }

@@ -70,6 +70,20 @@ app.post('/mymovies',
   }
 );
 
+app.put('/mymovies',
+  movieController.updateMovie,
+  (req, res) => {
+    return res.status(200).json(res.locals);
+  }
+);
+
+app.delete('/mymovies',
+  movieController.deleteMovie,
+  (req, res) => {
+    return res.status(200).json(res.locals);
+  }
+);
+
 
 
 app.use((err, req, res, next) => {
