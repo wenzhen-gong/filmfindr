@@ -1,12 +1,9 @@
 import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faHeart } from "@fortawesome/free-solid-svg-icons";
 import "./style.css";
 
 const MovieRecommendationModal = ({ movie }) => {
-
   const [isHovered, setIsHovered] = useState(false);
   const [hover, setHover] = useState(0);
   const [reviews, setReviews] = useState(null);
