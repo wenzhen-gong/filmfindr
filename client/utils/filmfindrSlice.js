@@ -16,37 +16,31 @@ const initialState = {
     {
       picture:
         "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt4633694%2F&psig=AOvVaw",
-      title: "Spiderman",
+      title: "Movie1",
       genre: "Action",
-      description: "A young Peter Parker/Spider",
-      reason: "good stuff",
+      description: "Movie1 description",
+      reason: "movie1 resson",
     },
     {
       picture:
         "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt4633694%2F&psig=AOvVaw",
-      title: "Spiderman",
+      title: "Movie2",
       genre: "Action",
-      description: "A young Peter Parker/Spider",
-      reason: "good stuff",
+      description: "Movie2 description",
+      reason: "movie2 resson",
     },
     {
       picture:
         "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt4633694%2F&psig=AOvVaw",
-      title: "Spiderman",
+      title: "Movie3",
       genre: "Action",
-      description: "A young Peter Parker/Spider",
-      reason: "good stuff",
+      description: "Movie3 description",
+      reason: "movie3 resson",
     },
   ],
   error: null,
   currentInput: "",
   movieRec: [],
-  // for each moive?
-  isFavorite: false,
-  isHovered: false,
-  reviews: [],
-  rating: 0,
-  hover: 0,
 };
 
 export const filmfindrSlice = createSlice({
@@ -77,15 +71,6 @@ export const filmfindrSlice = createSlice({
       state.signInModalOpen = false;
     },
 
-    testreducer: {
-      reducer: (state, action) => {
-        console.log(action.payload);
-        state.isLoggedIn = true;
-        state.signInModalOpen = false;
-        state.user = action.payload;
-      },
-      prepare: (event) => ({ payload: event.target[0].value }),
-    },
 
     // below are David's synchronous reducers
     setError: (state, action) => {
@@ -145,38 +130,23 @@ export const filmfindrSlice = createSlice({
     resetMovieData: (state) => {
       state.movieData = [];
     },
-    // maybe for each movie?
-    handleFavorite: (state) => {
-      state.isFavorite = !state.isFavorite;
-    },
 
-    handleReview: {
-      reducer: (state, action) => {
-        state.reviews = state.reviews.concat(action.payload);
-        // how to set event.target[0].value = ''???
-      },
-      prepare: (event) => {
-        event.preventDefault();
-        return { payload: event.target[0].value };
-      },
-    },
 
-    handleReviewDelete: (state, action) => {
-      state.reviews = state.reviews.filter((review, i) => i !== action.payload);
-    },
+  // // for personal review purpose
+  //   handleReview: {
+  //     reducer: (state, action) => {
+  //       state.reviews = state.reviews.concat(action.payload);
+  //       // how to set event.target[0].value = ''???
+  //     },
+  //     prepare: (event) => {
+  //       event.preventDefault();
+  //       return { payload: event.target[0].value };
+  //     },
+  //   },
 
-    setIsHovered: (state, action) => {
-      state.isHovered = action.payload;
-    },
-
-    setHover: (state, action) => {
-      state.hover = action.payload;
-    },
-
-    setRating: (state, action) => {
-      state.rating = action.payload;
-    },
+  
   },
+
   extraReducers(builder) {
     builder.addCase(signIn.fulfilled, (state, action) => {
       state.isLoggedIn = true;
@@ -207,7 +177,7 @@ export const {
   closeSignUpModal,
   openSignInModal,
   closeSignInModal,
-  testreducer,
+  // testreducer,
 
   setError,
   setCurrentQuestionIndex,
@@ -216,12 +186,6 @@ export const {
   setMovieRec,
   resetMovieData,
 
-  handleFavorite,
-  handleReview,
-  handleReviewDelete,
-  setIsHovered,
-  setHover,
-  setRating,
 } = filmfindrSlice.actions;
 export default filmfindrSlice.reducer;
 
