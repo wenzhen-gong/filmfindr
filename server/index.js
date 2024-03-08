@@ -14,8 +14,6 @@ const MONGO_URI = 'mongodb+srv://jaycruz2905:codesmith@reinforcement.vyfuoyn.mon
 
 mongoose.connect(MONGO_URI, {
   dbName: 'Reinforcement',
-  // useNewUrlParser: true,
-  // useUnifiedTopology: true
 })
   .then(() => console.log('------> Connected to Mongo DB.'))
   .catch(err => console.log(err));
@@ -37,22 +35,25 @@ app.post('/signup',
   cookieController.setSSIDCookie,
   sessionController.createSession,
   (req, res) => {
-    return res.status(200).json(res.locals.userData);
+    return res.status(200).json(res.locals);
   }
 );
 
 app.post('/signin', 
   authController.verifyUser,
+  cookieController.setSSIDCookie,
+  sessionController.createSession,
   (req, res) => {
-    return res.status(200).json(res.locals.userData);
+    return res.status(200).json(res.locals);
   }
 );
 
-// app.post('/signout', 
-//   (req, res) => {
-//     return res.status(200).send('Signed out successfully');
-//   }
-// );
+app.delete('/signout', 
+sessionController.deleteSession,
+  (req, res) => {
+    return res.status(200).json(res.locals);
+  }
+);
 
 
 app.use((err, req, res, next) => {

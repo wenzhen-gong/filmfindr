@@ -57,8 +57,8 @@ authController.createUser = async (req, res, next) => {
 
                 // console.log(data);
                 const userData = data.data[0]
-                const resData = { userId: userData.UserID, username: userData.UserName, email: userData.Email }
-                res.locals.userData = resData;
+                res.locals.userData = { userId: userData.UserID, username: userData.UserName, email: userData.Email };
+                res.locals.userStats = { signedIn: true };
                 console.log('res.locals', res.locals.userData);
                 console.log('------> User successfully created... Maybe');
                 console.log('------> authController.createUser END')
@@ -130,8 +130,11 @@ authController.verifyUser = async (req, res, next) => {
                     }
                 })
             } else {
+                const userData = data[0];
+                res.locals.userData = { userId: userData.UserID, userName: userData.UserName, Email: userData.Email };
+                res.locals.userStatus = { signedIn: true }
+                console.log('res.locals', res.locals.userData);
                 console.log('------> authController.verifyUser - user VERIFIED');
-                res.locals.userData = data[0];
                 console.log('------> authController.verifyUser END');
                 return next();
             }
