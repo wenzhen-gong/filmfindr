@@ -4,26 +4,23 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   entry: {
-    src: './client/index.js'
+    app: './client/index.js',
   },
   
   devtool: 'inline-source-map',
 
   devServer: {
-    port: 8080,
-    static: {
-        publicPath: '/',
-        directory: path.join(__dirname, '/dist')
+    // // uncomment when serving bundled files directly from /dist after building
+    // static: {
+    //   directory: path.resolve(__dirname, 'dist'),
+    // }
+
+    // // for some reason HMR does not work properly. So liveReload is being used (hot has to be set to false to make liveReload work)
+    hot: false,
+    liveReload: true,
+    client: {
+      progress: true,
     },
-    proxy: {
-        '/': {
-            target: 'http://localhost:3000',
-            secure: false,
-        }
-    },
-    hot: true,
-    open: true,
-    historyApiFallback: true
   },
 
   plugins: [
@@ -38,11 +35,13 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: '/',
   },
+
   mode:'development',
+
   module: {
     rules: [
       {
-        test: /\.(?:js|mjs|cjs)$/,
+        test: /\.(?:js|mjs|cjs|jsx)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -52,9 +51,10 @@ module.exports = {
         },
       },
       {
-        test: /.(css|scss)$/,
-        exclude: /node_modules/,
-        use: ['style-loader', 'css-loader'],
+        test: /\.(css|sass|scss)$/,
+        // excluding everything under node_modules except /bootstrap
+        exclude: /node_modules(?!\/bootstrap)/,
+        use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
       }
     ],
   },
