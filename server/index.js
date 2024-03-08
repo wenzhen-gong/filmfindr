@@ -4,6 +4,9 @@ const path = require('path');
 const app = express();
 const PORT = 3000;
 
+const apiController = require('./controllers/apiController')
+
+
 app.use(express.json());
 
 app.use('/', express.static(path.resolve(__dirname, '../dist')));
@@ -28,6 +31,11 @@ app.post('/signin',
     return res.status(200).json(res.locals);
   }
 );
+
+app.post('/recommendation', apiController.callGemini, apiController.callTMDB, (req, res) =>{
+  const recsArr = res.locals.recsArr;
+  return res.status(200).json(recsArr);
+});
 
 
 app.use((err, req, res, next) => {

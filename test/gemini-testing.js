@@ -1,4 +1,3 @@
-const axios = require ('axios');
 require('dotenv').config();
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
@@ -45,7 +44,6 @@ for (const key in testInput) {
 }
 
 async function run() {
-    // For text-only input, use the gemini-pro model
     const model = genAI.getGenerativeModel({ model: "gemini-pro"});
   
     const prompt = `I'm looking for three movie recommendations based on these criteria:
