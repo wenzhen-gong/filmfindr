@@ -34,6 +34,7 @@ app.post('/signin',
 
 app.post('/recommendation', apiController.callGemini, apiController.callTMDB, (req, res) =>{
   const recsArr = res.locals.recsArr;
+  
   return res.status(200).json(recsArr);
 });
 

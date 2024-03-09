@@ -79,16 +79,17 @@ const geminiController = {
                     6. I want a movie that is similar to these movies: ${q6}
                        I've already seen these movies. Please do not recommend them to me: ${q7}
                 
-                    Please only return a javacript array of json objects, each object with a Title property, a Year property assigned the release year and a Reason property based on the above prompt.
+                    You must return a javacript array of JSON objects, each object with a "Title" property, a "Year" property assigned the release year and a "Reason" property based on the above prompt.
                     
                     `;
                   
                     const result = await model.generateContent(prompt);
                     const response = await result.response;
                     let responseStr = response.text();
-                    console.log("responseStr: ", responseStr)
+
+                    // console.log("responseStr: ", responseStr)
                     
-                    console.log("type of responseStr: ", typeof responseStr)
+                    // console.log("type of responseStr: ", typeof responseStr)
 
                     
                     if (responseStr.charAt(4) === 's'){
@@ -101,20 +102,19 @@ const geminiController = {
                         responseStr = responseStr.trim().slice(4, -4);
                     }
                     
-                    console.log("spliced responseStr: ", responseStr)
+                    // console.log("spliced responseStr: ", responseStr)
 
-                    // const suggestionsArr = responseStr
                     const suggestionsArr = JSON.parse(responseStr);
-                    console.log("what is getting added to res.locals: ", suggestionsArr)
+                    // console.log("what is getting added to res.locals: ", suggestionsArr)
 
                     res.locals.suggestionsArr = suggestionsArr;
 
                     next();
                   } catch (err) {
                       next({
-                            log: `callGemini: ERROR: ${err}`,
+                            log: `callGemini: ${err}`,
                             message: {
-                                err: 'Having problems with Gemini API',
+                                err: 'Gemini servers are overloaded. Please try again',
                             },
                             status: 500,
                         });
@@ -130,49 +130,53 @@ const geminiController = {
             // console.log("type from res.locals: ", typeof suggestionsArr);
 
 
-    try {
-        for (const movie of suggestionsArr) {
-            const searchTitle = movie.Title;
-            const year = movie.Year;
-            const reason = movie.Reason;
-            const url = `https://api.themoviedb.org/3/search/movie?query=${searchTitle}&include_adult=false&language=en-US&primary_release_year=${year}&api_key=YOUR_API_KEY`;
+        try {
+            for (const movie of suggestionsArr) {
+                const searchTitle = movie.Title;
+                const year = movie.Year;
+                const reason = movie.Reason;
+                const url = `https://api.themoviedb.org/3/search/movie?query=${searchTitle}&include_adult=false&language=en-US&primary_release_year=${year}&api_key=YOUR_API_KEY`;
 
-            const response = await fetch(url, TMDBoptions);
-            const data = await response.json();
+                const response = await fetch(url, TMDBoptions);
+                const data = await response.json();
 
-            let results = data.results;
+                let results = data.results;
 
-            if (results.length !== 1) {
-                results = results.filter(movie => movie.title === searchTitle);
+                if (results.length !== 1) {
+                    results = results.filter(movie => movie.title === searchTitle);
+                }
+
+                filteredResultsArr.push({ ...results[0], reason, year });
             }
 
-            // Push the movie object with reason into filteredResultsArr
-            filteredResultsArr.push({ ...results[0], reason });
-        }
+        // console.log("filteredResultsArr: ", filteredResultsArr);
 
         filteredResultsArr.forEach(movie => {
             const genres = movie.genre_ids.map(genreId => genreTable[genreId]);
-            const reason = movie.reason; // Use movie.reason instead of movie.Reason
+            const reason = movie.reason;
+            const year = movie.year;
+
 
             const rec = {
                 picture: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
                 title: movie.title,
                 genre: genres,
                 overview: movie.overview,
-                reason: reason
+                reason: reason,
+                year: year
             };
 
             recsArr.push(rec);
         });
 
+        // console.log("final recsArr: ", recsArr);
         res.locals.recsArr = recsArr;
-        console.log("final recsArr: ", recsArr);
         next();
         } catch (err) {
             next({
-                log: `callTMDB: ERROR: ${err}`,
+                log: `callTMDB: ${err}`,
                 message: {
-                    err: 'Having problems with TMDB',
+                    err: 'Having problems with TMDB. Please try again',
                 },
                 status: 500,
             });
