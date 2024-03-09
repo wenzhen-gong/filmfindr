@@ -101,7 +101,7 @@ export const filmfindrSlice = createSlice({
       } else if (Array.isArray(action.payload)) {
         state.answers = {
           ...state.answers,
-          [name]: action.payload,
+          [name]: [...state.movieRec],
         };
       } else {
         state.answers = {};
@@ -115,6 +115,8 @@ export const filmfindrSlice = createSlice({
     setMovieRec: (state, action) => {
       if (typeof action.payload === "string") {
         state.movieRec = [...state.movieRec, action.payload];
+      } else if (Array.isArray(action.payload)){
+        state.movieRec = [];
       } else {
         state.movieRec = state.movieRec.filter(
           (movie, i) => i !== action.payload

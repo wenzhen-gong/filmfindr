@@ -44,7 +44,7 @@ const RecommendationComponent = () => {
     <>
       {movieData.length > 0 && (
         <div className='flex flex-col items-center justify-center bg-black text-gray-200'>
-          <button onClick={() => dispatch(sendAnswersToApi(answers)) className='bg-gray-800 hover:bg-red-600 text-gray-200 font-bold py-2 px-4 m-5 rounded'}>
+          <button onClick={() => dispatch(sendAnswersToApi(answers))} className='bg-gray-800 hover:bg-red-600 text-gray-200 font-bold py-2 px-4 m-5 rounded'>
             More Recommendations
           </button>
           <h1 className='text-4xl font-bold my-5 pt-40'>Movie Recommendations</h1>
@@ -53,7 +53,7 @@ const RecommendationComponent = () => {
               <MovieRecommendationModal key={index} movie={movie} />
             ))}
           </div>
-          <button onClick={resetRecommendations className='bg-gray-800 hover:bg-red-600 text-gray-200 font-bold py-2 px-4 m-10 rounded' }>
+          <button onClick={resetRecommendations} className='bg-gray-800 hover:bg-red-600 text-gray-200 font-bold py-2 px-4 m-10 rounded'>
             Looking for something different?
           </button>
         </div>

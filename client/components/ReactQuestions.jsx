@@ -138,6 +138,7 @@ const ReactQuestions = () => {
       // // setAnswers can take null, object as action.payload and follows different logic accordingly. In case of object, logic depends on value of type property.
       dispatch(setAnswers());
       dispatch(setCurrentQuestionIndex(currentQuestionIndex - 1));
+      dispatch(setMovieRec([]));
     }
   };
 
@@ -270,3 +271,5 @@ const ReactQuestions = () => {
     )
   );
 };
+
+export default ReactQuestions;
