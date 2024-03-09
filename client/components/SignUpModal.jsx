@@ -15,10 +15,10 @@ export default function SignUpModal() {
 
   return (
     <Modal show={showSignUpModal} onHide={() => dispatch(closeSignUpModal())}>
-      <Modal.Header closeButton>
+      <Modal.Header className="bg-gray-800 text-white" closeButton>
         <Modal.Title>Sign Up for FilmFindr NOW!</Modal.Title>
-      </Modal.Header>
-      <Form onSubmit={(event) => dispatch(signUp(event))}>
+      </Modal.Header >
+      <Form className="bg-gray-800 text-white" onSubmit={(event) => dispatch(signUp(event))}>
         <Modal.Body>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
@@ -47,11 +47,20 @@ export default function SignUpModal() {
         <Modal.Footer>
           <Button
             variant="secondary"
+            style={{ backgroundColor: '#000000', borderColor: '#000000' }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = 'gray'} 
+            onMouseLeave={(e) => e.target.style.backgroundColor = '#000000'} 
             onClick={() => dispatch(closeSignUpModal())}
           >
             Cancel
           </Button>
-          <Button variant="primary" type="submit" disabled={(password === password2 && password && email) ? false: true}>
+          <Button 
+            variant="primary" 
+            type="submit" disabled={(password === password2 && password && email) ? false: true}
+            style={{ backgroundColor: 'red', borderColor: 'red' }} 
+            onMouseEnter={(e) => e.target.style.backgroundColor = '#ff6666'} 
+            onMouseLeave={(e) => e.target.style.backgroundColor = 'red'}
+            >
             Sign Up
           </Button>
         </Modal.Footer>
