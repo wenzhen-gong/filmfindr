@@ -14,6 +14,10 @@ const MovieRecommendationModal = ({ movie }) => {
   const handleReview = (event) => {
     event.preventDefault();
     const review = event.target[0].value;
+    if (!review.trim()) {
+      event.target[0].value = "";
+      return;
+    }
     setReviews(review);
     event.target[0].value = "";
   };
@@ -50,7 +54,7 @@ const MovieRecommendationModal = ({ movie }) => {
       <button className='mt-2 w-full p-2 hover:bg-red-600 bg-red-500 text-white rounded' type='submit'>Submit</button>
      
       <p className='mt-2 font-bold'>Reviews:</p>
-      {reviews && <div className='mt-2'>{reviews}<button className='px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600' type='button' onClick={() => handleReviewDelete()}>X</button></div>}
+      {reviews && <div className='mt-2 w-full mx-auto flex flex-col items-center'><div className='flex justify-between items-center border-b py-2 w-full'>{reviews}<button className='px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600' type='button' onClick={() => handleReviewDelete()}>X</button></div> </div>}
     </form>
     <div className='flex mt-2'>
       {[...Array(5)].map((star, i) => {

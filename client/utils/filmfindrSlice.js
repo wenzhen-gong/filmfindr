@@ -12,32 +12,7 @@ const initialState = {
   // below are David's states
   answers: {},
   currentQuestionIndex: 0,
-  movieData: [
-    {
-      picture:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt4633694%2F&psig=AOvVaw",
-      title: "Movie1",
-      genre: "Action",
-      description: "Movie1 description",
-      reason: "movie1 resson",
-    },
-    {
-      picture:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt4633694%2F&psig=AOvVaw",
-      title: "Movie2",
-      genre: "Action",
-      description: "Movie2 description",
-      reason: "movie2 resson",
-    },
-    {
-      picture:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt4633694%2F&psig=AOvVaw",
-      title: "Movie3",
-      genre: "Action",
-      description: "Movie3 description",
-      reason: "movie3 resson",
-    },
-  ],
+  movieData: [],
   error: null,
   currentInput: "",
   movieRec: [],
@@ -165,6 +140,7 @@ export const filmfindrSlice = createSlice({
     });
     builder.addCase(sendAnswersToApi.rejected, (state, action) => {
       console.error("Failed to send answers:", action.payload);
+      state.error = action.error;
     });
   },
 });
