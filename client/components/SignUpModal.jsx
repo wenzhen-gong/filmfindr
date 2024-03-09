@@ -18,7 +18,10 @@ export default function SignUpModal() {
       <Modal.Header className="bg-gray-800 text-white" closeButton>
         <Modal.Title>Sign Up for FilmFindr NOW!</Modal.Title>
       </Modal.Header >
-      <Form className="bg-gray-800 text-white" onSubmit={(event) => dispatch(signUp(event))}>
+      <Form className="bg-gray-800 text-white" onSubmit={(event) => {
+          dispatch(signUp(event))
+          dispatch(closeSignUpModal())
+        }}>
         <Modal.Body>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>

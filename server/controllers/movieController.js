@@ -5,8 +5,8 @@ const movieController = {};
 movieController.fetchMovies = async (req, res, next) => {
     try {
         console.log('------> movieControllers.fetchMovies START');
-        // const { UserID } = req.params;
-        const UserID = 86;
+        const { UserID } = req.params;
+        // const UserID = 86;
 
         if (!UserID) throw new Error('ERROR: No UserID from req.body to query DB with');
 
@@ -41,15 +41,13 @@ movieController.fetchMovies = async (req, res, next) => {
 movieController.saveMovie = async (req, res, next) => {
     try {
         console.log('------> movieController.saveMovie START');
-        // const { UserID, movie } = req.body;
-        const UserID = 86;
-        // const email = 'email1@gmail.com';
-        const movie = {
-            MovieTitle: 'FakeMovie3',
-            Stars: 2,
-            Review: 'This movie was trash!'
-        }
-        // const movieTitle = 'FakeMovie 23';
+        const { UserID, movie } = req.body;
+        // const UserID = 86;
+        // const movie = {
+        //     MovieTitle: 'FakeMovie3',
+        //     Stars: 2,
+        //     Review: 'This movie was trash!'
+        // }
 
         if (!UserID || !movie) throw new Error('ERROR: No email or movie from req.body to query DB with');
 
@@ -201,10 +199,11 @@ movieController.updateMovie = async (req, res, next) => {
 movieController.deleteMovie = async (req, res, next) => {
     try {
         console.log('------> movieController.deleteMovie START');
-        // const MovieID = req.params;
-        const MovieID = 35;
+        const {movieId, UserID} = req.params;
+        // const movieId = 35;
+        console.log('------> req.query: ',req.query);
 
-        if (!MovieID) throw new Error('ERROR: MovieID from req.params to query DB with');
+        if (!movieId) throw new Error('ERROR: movieId from req.params to query DB with');
 
         // //check to see if user has already saved movie
 
@@ -264,7 +263,7 @@ movieController.deleteMovie = async (req, res, next) => {
         await supabase
             .from('Movies')
             .delete()
-            .match({ MovieID: MovieID });
+            .match({ movieId: movieId, UserID: UserID });
 
         console.log('------> movieController.deleteMovie END');
         return next();

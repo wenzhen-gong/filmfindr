@@ -188,7 +188,7 @@ export const signUp = createAsyncThunk("signUp", async (event) => {
   event.preventDefault();
   const requestBody = {email: event.target[0].value, password: event.target[1].value};
 
-  let response = await fetch("", {
+  let response = await fetch("http://localhost:3000/signup", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -201,50 +201,44 @@ export const signUp = createAsyncThunk("signUp", async (event) => {
 
 export const signIn = createAsyncThunk("signIn", async (event) => {
   event.preventDefault();
-  // const searchParams = new URLSearchParams({
-  //   email: event.target[0].value,
-  //   password: event.target[1].value,
-  // });
+  const searchParams = new URLSearchParams({
+    email: event.target[0].value,
+    password: event.target[1].value,
+  });
 
-  // let response = await fetch("?" + searchParams, {
-  //   method: "GET",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  // });
-  // const user = await response.json();
+  let response = await fetch("http://localhost:3000/signin" + searchParams, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const user = await response.json();
 
   // assuming fetch request will return corresponding user object after db call
-  return { UserID: 79, UserName: "user1", email: "email1" };
+  return user;
 });
 
 export const fetchMovies = createAsyncThunk("fetchMovies", async (user) => {
   // assuming fetch request will return corresponding movies object after db call
 
-  // let response = await fetch(
-  //   "?" +
-  //     new URLSearchParams({
-  //       UserID: user.UserID,
-  //     }),
-  //   {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   }
-  // );
-  // const movies = await response.json();
-  return [{
-    MovieID: 17,
-    MovieTitle: "FakeMovie 1",
-    Stars: 3,
-    Review: "FakeReview1",
-  }];
-
+  let response = await fetch(
+    "http://localhost:3000/mymovies" +
+      new URLSearchParams({
+        UserID: user.UserID,
+      }),
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  const movies = await response.json();
+  return movies;
 });
 
 export const addMovie = createAsyncThunk("addMovie", async (movie) => {
-  let response = await fetch("", {
+  let response = await fetch("http://localhost:3000/mymovies", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -256,14 +250,14 @@ export const addMovie = createAsyncThunk("addMovie", async (movie) => {
 });
 
 export const deleteMovie = createAsyncThunk("deleteMovie", async (movie) => {
-  // let response = await fetch(`/${movie.MovieID}`, {
-  //   method: "DELETE",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  // });
-  // // What response am I expecting?
-  // response = await response.json();
+  let response = await fetch(`/${movie.MovieID}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  // What response am I expecting?
+  response = await response.json();
 });
 
 export const sendAnswersToApi = createAsyncThunk(

@@ -7,9 +7,9 @@ const authController = {};
 authController.createUser = async (req, res, next) => {
     try {
         console.log('------> authController.createUser START');
-        // const { email, password } = req.body;
-        const email = 'email2@gmail.com'
-        const password = '123';
+        const { email, password } = req.body;
+        // const email = 'email2@gmail.com'
+        // const password = '123';
 
         if (!email || !password) {
             next({
@@ -66,7 +66,7 @@ authController.createUser = async (req, res, next) => {
                     .select();
 
                 const userData = data.data[0]
-                res.locals.userData = { UserID: userData.UserID, UserName: userNameStack, Email: userData.Email };
+                res.locals.userData = { UserID: userData.UserID, UserName: userNameStack, email: userData.Email };
                 console.log('res.locals', res.locals.userData);
                 console.log('------> User successfully created... Maybe');
                 console.log('------> authController.createUser END')
@@ -96,10 +96,9 @@ authController.createUser = async (req, res, next) => {
 authController.verifyUser = async (req, res, next) => {
     try {
         console.log('------> authController.verifyUser START');
-        // const { email, password } = req.body;
-        // const {email, password} = req.params;
-        const email = 'email1@gmail.com'
-        const password = '123';
+        const {email, password} = req.params;
+        // const email = 'email1@gmail.com'
+        // const password = '123';
 
         if (!email || !password) {
             next({
@@ -138,7 +137,7 @@ authController.verifyUser = async (req, res, next) => {
                 })
             } else {
                 const userData = data[0];
-                res.locals.userData = { UserID: userData.UserID, UserName: userData.UserName, Email: userData.Email };
+                res.locals.userData = { UserID: userData.UserID, UserName: userData.UserName, email: userData.Email };
                 console.log('res.locals', res.locals.userData);
                 console.log('------> authController.verifyUser - user VERIFIED');
                 console.log('------> authController.verifyUser END');

@@ -5,20 +5,20 @@ const cookieController = {};
 cookieController.setSSIDCookie = async (req, res, next) => {
     try {
         console.log('------> cookieController.setSSIDCookie START');
-        // let email;
-        // let password;
+        let email;
+        let password;
 
-        // if (req.body.email) {
-        //     email = req.body.email;
-        //     password = req.body.password;
-        // }
-        // if (req.params.email) {
-        //     email = req.params.email;
-        //     password = req.params.password;
-        // }
+        if (req.body.email) {
+            email = req.body.email;
+            password = req.body.password;
+        }
+        if (req.params.email) {
+            email = req.params.email;
+            password = req.params.password;
+        }
 
-        const email = 'email1@gmail.com';
-        const password = '123';
+        // const email = 'email1@gmail.com';
+        // const password = '123';
         if (!email || !password ) throw new Error('ERROR: No email or password input');
 
         //check if user exists in DB and to get unique UserID/UserName

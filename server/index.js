@@ -80,7 +80,7 @@ app.post('/mymovies',
 //   }
 // );
 
-app.delete('/mymovies',
+app.delete('/deleteMovies/:movieId:userId',
   movieController.deleteMovie,
   (req, res) => {
     return res.status(200).json(res.locals);
