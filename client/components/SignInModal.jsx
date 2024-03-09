@@ -12,10 +12,10 @@ export default function SignInModal() {
   const [password, setPassword] = useState('')
   return (
     <Modal show={showSignInModal} onHide={() => dispatch(closeSignInModal())}>
-      <Modal.Header closeButton>
+      <Modal.Header className="bg-gray-800 text-white" closeButton>
         <Modal.Title>Sign In Here</Modal.Title>
       </Modal.Header>
-      <Form onSubmit={(event) => dispatch(signIn(event))}>
+      <Form className="bg-gray-800 text-white" onSubmit={(event) => dispatch(signIn(event))}>
         <Modal.Body>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
@@ -30,11 +30,19 @@ export default function SignInModal() {
         <Modal.Footer>
           <Button
             variant="secondary"
+            style={{ backgroundColor: '#000000', borderColor: '#000000' }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = 'gray'} 
+            onMouseLeave={(e) => e.target.style.backgroundColor = '#000000'} 
             onClick={() => dispatch(closeSignInModal())}
           >
             Cancel
           </Button>
-          <Button variant="primary" type="submit" disabled = {email && password? false: true}>
+          <Button 
+            variant="primary" 
+            type="submit" disabled = {email && password? false: true}
+            style={{ backgroundColor: 'red', borderColor: 'red' }} 
+            onMouseEnter={(e) => e.target.style.backgroundColor = '#ff6666'} 
+            >
             Sign In
           </Button>
         </Modal.Footer>

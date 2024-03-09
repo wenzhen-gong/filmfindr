@@ -138,6 +138,7 @@ const ReactQuestions = () => {
       // // setAnswers can take null, object as action.payload and follows different logic accordingly. In case of object, logic depends on value of type property.
       dispatch(setAnswers());
       dispatch(setCurrentQuestionIndex(currentQuestionIndex - 1));
+      dispatch(setMovieRec([]));
     }
   };
 
@@ -201,66 +202,71 @@ const ReactQuestions = () => {
   return (
     currentQuestion &&
     currentQuestionIndex <= inputs.length - 1 && (
-      <div className="questions-container">
-        <h1>Movie Questions</h1>
-        <form onSubmit={handleNext} name="questions">
-          <h3>{currentQuestion.question}</h3>
-          {currentQuestion.type === "text" ? (
-            <input
-              type="text"
-              placeholder={currentQuestion.placeholder}
-              value={currentInput}
-              onChange={(e) => dispatch(setCurrentInput(e.target.value))}
-            />
-          ) : (
-            currentQuestion.options.map((option, index) => (
-              <div key={index}>
-                <input
-                  type={currentQuestion.type}
-                  id={option}
-                  name={`question_${currentQuestionIndex}`}
-                  value={option}
-                  onChange={handleChange}
-                  checked={
-                    currentQuestion.type === "checkbox"
-                      ? (
-                          answers[`question_${currentQuestionIndex + 1}`] || []
-                        ).includes(option)
-                      : answers[`question_${currentQuestionIndex + 1}`] ===
-                        option
-                  }
-                />
-                <label htmlFor={option}>{option}</label>
-              </div>
-            ))
-          )}
-          {currentQuestionIndex >= 0 && (
-            <button type="button" onClick={handlePrevious}>
-              Back
-            </button>
-          )}
-          {currentQuestionIndex === 5 && (
-            <button type="button" onClick={handleList}>
-              Add
-            </button>
-          )}
-          <button type="submit">Next</button>
-          {movieRec.length > 0 && (
-            <ul>
-              {movieRec.map((movie, index) => (
-                <li key={index}>
-                  {movie}{" "}
-                  <button type="button" onClick={() => handleListDelete(index)}>
-                    X
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-          {error && <p>{error}</p>}
+      <div className="flex flex-col items-center justify-center text-gray-200 w-screen h-screen">
+        <h1 className='text-6xl font-bold mb-8'>Movie Questions</h1>
+        <form onSubmit={handleNext} name="questions" className={`flex flex-col space-between bg-gray-800 w-[80vw] p-10 rounded shadow-md`}>
+          <div className='flex flex-col space-between'>
+            <h3 className='flex justify-center items-align text-4xl font-semibold mb-4'>{currentQuestion.question}</h3>
+            {currentQuestion.type === "text" ? (
+              <input
+                type="text"
+                placeholder={currentQuestion.placeholder}
+                value={currentInput}
+                onChange={(e) => dispatch(setCurrentInput(e.target.value))}
+                className='p-2 w-full border border-gray-600 rounded mb-4 bg-gray-700 text-white text-center mx-auto'
+              />
+            ) : (
+              currentQuestion.options.map((option, index) => (
+                <div key={index} className='flex justify-center items-center text-2xl mb-2'>
+                  <input
+                    type={currentQuestion.type}
+                    id={option}
+                    name={`question_${currentQuestionIndex}`}
+                    value={option}
+                    onChange={handleChange}
+                    checked={
+                      currentQuestion.type === "checkbox"
+                        ? (
+                            answers[`question_${currentQuestionIndex + 1}`] || []
+                          ).includes(option)
+                        : answers[`question_${currentQuestionIndex + 1}`] ===
+                          option
+                    }
+                    className='mr-2 cursor-pointer'
+                  />
+                  <label htmlFor={option} className='text-gray-300'>{option}</label>
+                </div>
+              ))
+            )}
+            <div className='flex justify-between'>
+              {currentQuestionIndex >= 0 && (
+                <button type="button" onClick={handlePrevious} className='px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600'>
+                  Back
+                </button>
+              )}
+              {currentQuestionIndex === 5 && (
+                <button type="button" onClick={handleList} className='px-4 py-2 bg-stone-900 text-white rounded hover:bg-stone-800'>
+                  Add
+                </button>
+              )}
+              <button type="submit" className='px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600'>Next</button>
+              {movieRec.length > 0 && (
+                <ul className='mt-2 w-1/4 mx-auto flex flex-col items-center'>
+                  {movieRec.map((movie, index) => (
+                    <li key={index}>
+                      {movie}{" "}
+                      <button type="button" onClick={() => handleListDelete(index)}>
+                        X
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {error && <p className='text-red-500 text-2xl font-bold justify-center text-center items-center mt-2'>{error}</p>}
+            </div>
+          </div>
         </form>
-
-        {answers && <p>{JSON.stringify(answers)}</p>}
+        {answers && <p  className='mt-4  text-center'>{JSON.stringify(answers)}</p>}
       </div>
     )
   );
