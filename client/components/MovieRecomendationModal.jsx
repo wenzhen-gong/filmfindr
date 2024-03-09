@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faHeart } from "@fortawesome/free-solid-svg-icons";
 import "./style.css";
@@ -25,7 +26,7 @@ const MovieRecommendationModal = ({ movie }) => {
     setIsWatched(!isWatched);
     setReviews(null);
     setRating(0);
-    // call addToMyMovies
+    // call addMovie
   };
   return (
     <div className="recommendation-container">

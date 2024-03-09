@@ -8,7 +8,7 @@ const initialState = {
   user: null,
   movies: [],
   loadingMovies: "idle",
-
+  myMoviesFlag: true,
   // below are David's states
   answers: {},
   currentQuestionIndex: 0,
@@ -47,11 +47,6 @@ export const filmfindrSlice = createSlice({
   name: "myReducers",
   initialState,
   reducers: {
-    // handlelogIn: (state) => {
-    //   // other logics need to be written like authorization
-    //   state.isLoggedIn = true;
-    //   console.log("mimicing logging in");
-    // },
     handlelogOut: (state) => {
       // other logics need to be written like clear cookies and/or jwt
       state.isLoggedIn = false;
@@ -70,7 +65,6 @@ export const filmfindrSlice = createSlice({
     closeSignInModal: (state) => {
       state.signInModalOpen = false;
     },
-
 
     // below are David's synchronous reducers
     setError: (state, action) => {
@@ -131,20 +125,17 @@ export const filmfindrSlice = createSlice({
       state.movieData = [];
     },
 
-
-  // // for personal review purpose
-  //   handleReview: {
-  //     reducer: (state, action) => {
-  //       state.reviews = state.reviews.concat(action.payload);
-  //       // how to set event.target[0].value = ''???
-  //     },
-  //     prepare: (event) => {
-  //       event.preventDefault();
-  //       return { payload: event.target[0].value };
-  //     },
-  //   },
-
-  
+    // // for personal review purpose
+    //   handleReview: {
+    //     reducer: (state, action) => {
+    //       state.reviews = state.reviews.concat(action.payload);
+    //       // how to set event.target[0].value = ''???
+    //     },
+    //     prepare: (event) => {
+    //       event.preventDefault();
+    //       return { payload: event.target[0].value };
+    //     },
+    //   },
   },
 
   extraReducers(builder) {
@@ -159,7 +150,11 @@ export const filmfindrSlice = createSlice({
     });
     builder.addCase(fetchMovies.fulfilled, (state, action) => {
       state.loadingMovies = "succeeded";
-      state.movies = state.movies.concat(action.payload);
+      state.movies = action.payload;
+    });
+
+    builder.addCase(deleteMovie.fulfilled, (state) => {
+      state.myMoviesFlag = !state.myMoviesFlag;
     });
 
     // David's asynchronous reducer
@@ -177,7 +172,6 @@ export const {
   closeSignUpModal,
   openSignInModal,
   closeSignInModal,
-  // testreducer,
 
   setError,
   setCurrentQuestionIndex,
@@ -185,46 +179,90 @@ export const {
   setCurrentInput,
   setMovieRec,
   resetMovieData,
-
 } = filmfindrSlice.actions;
 export default filmfindrSlice.reducer;
 
 export const signUp = createAsyncThunk("signUp", async (event) => {
-  // need to change to sign up user logic (db call with insert)
   event.preventDefault();
-  console.log(event.target[0].value);
-  console.log(event.target[1].value);
-  console.log(event.target[2].value);
+  const requestBody = {email: event.target[0].value, password: event.target[1].value};
 
+  let response = await fetch("", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(requestBody),
+  });
+  // What response am I expecting?
+  response = await response.json();
 });
+
 export const signIn = createAsyncThunk("signIn", async (event) => {
-  // need to change to sign in logic (db call with select)
   event.preventDefault();
-  console.log(event.target[0].value);
-  console.log(event.target[1].value);
-  let response = await fetch("https://swapi.dev/api/people/1");
-  response = await response.json();
-  return { username: "fakename" };
+  // const searchParams = new URLSearchParams({
+  //   email: event.target[0].value,
+  //   password: event.target[1].value,
+  // });
+
+  // let response = await fetch("?" + searchParams, {
+  //   method: "GET",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  // });
+  // const user = await response.json();
+
+  // assuming fetch request will return corresponding user object after db call
+  return { UserID: 79, UserName: "user1", email: "email1" };
 });
 
-export const fetchMovies = createAsyncThunk("fetchMovies", async (movie) => {
-  // need to change to fetch movies logic (db call with select)
-  let response = await fetch("https://swapi.dev/api/people/1");
-  response = await response.json();
-  console.log("fetching movies");
-  return movie;
+export const fetchMovies = createAsyncThunk("fetchMovies", async (user) => {
+  // assuming fetch request will return corresponding movies object after db call
+
+  // let response = await fetch(
+  //   "?" +
+  //     new URLSearchParams({
+  //       UserID: user.UserID,
+  //     }),
+  //   {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   }
+  // );
+  // const movies = await response.json();
+  return [{
+    MovieID: 17,
+    MovieTitle: "FakeMovie 1",
+    Stars: 3,
+    Review: "FakeReview1",
+  }];
+
 });
 
-// temp
-export const addMovie = createAsyncThunk("addMovie", async () => {
-  // need to change to add movies logic (db call with insert)
-  let response = await fetch("https://swapi.dev/api/people/1");
+export const addMovie = createAsyncThunk("addMovie", async (movie) => {
+  let response = await fetch("", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(movie),
+  });
+  // What response am I expecting?
   response = await response.json();
-  console.log("adding movies");
-  return { moviename: "fakemovie" };
 });
 
-// David's asynchronous reducer
+export const deleteMovie = createAsyncThunk("deleteMovie", async (movie) => {
+  // let response = await fetch(`/${movie.MovieID}`, {
+  //   method: "DELETE",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  // });
+  // // What response am I expecting?
+  // response = await response.json();
+});
 
 export const sendAnswersToApi = createAsyncThunk(
   "sendAnswersToApi",
