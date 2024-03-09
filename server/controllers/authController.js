@@ -7,12 +7,9 @@ const authController = {};
 authController.createUser = async (req, res, next) => {
     try {
         console.log('------> authController.createUser START');
-        // const { username, email, password } = req.body;
-        // const username = 'user1';
-        // const email = 'email1'
-        // const password = '123';
-
-        const { email, password } = req.body;
+        // const { email, password } = req.body;
+        const email = 'email2@gmail.com'
+        const password = '123';
 
         if (!email || !password) {
             next({
@@ -51,15 +48,25 @@ authController.createUser = async (req, res, next) => {
                         }
                     })
                 }
+
+                //create username from email
+                let userNameStack = ''
+                for (let i = 0; i < email.length; i++) {
+                    if (email[i] === '@') {
+                        break;
+                    }
+                    userNameStack = userNameStack + email[i];
+                }
+                console.log('userNameStack: ', userNameStack);
+
                 //create user
                 data = await supabase
                     .from('Users')
-                    .insert([ { UserName: username, Email: email, Password: hash } ])
+                    .insert([ { UserName: userNameStack, Email: email, Password: hash } ])
                     .select();
 
-                // console.log(data);
                 const userData = data.data[0]
-                res.locals.userData = { userId: userData.UserID, username: userData.UserName, email: userData.Email };
+                res.locals.userData = { UserID: userData.UserID, UserName: userNameStack, Email: userData.Email };
                 console.log('res.locals', res.locals.userData);
                 console.log('------> User successfully created... Maybe');
                 console.log('------> authController.createUser END')
@@ -90,7 +97,8 @@ authController.verifyUser = async (req, res, next) => {
     try {
         console.log('------> authController.verifyUser START');
         // const { email, password } = req.body;
-        const email = 'email1'
+        // const {email, password} = req.params;
+        const email = 'email1@gmail.com'
         const password = '123';
 
         if (!email || !password) {
@@ -130,7 +138,7 @@ authController.verifyUser = async (req, res, next) => {
                 })
             } else {
                 const userData = data[0];
-                res.locals.userData = { userId: userData.UserID, userName: userData.UserName, Email: userData.Email };
+                res.locals.userData = { UserID: userData.UserID, UserName: userData.UserName, Email: userData.Email };
                 console.log('res.locals', res.locals.userData);
                 console.log('------> authController.verifyUser - user VERIFIED');
                 console.log('------> authController.verifyUser END');

@@ -5,15 +5,15 @@ const movieController = {};
 movieController.fetchMovies = async (req, res, next) => {
     try {
         console.log('------> movieControllers.fetchMovies START');
-        // const { userId } = req.body;
-        const userId = 78;
+        // const { UserID } = req.params;
+        const UserID = 86;
 
-        if (!userId) throw new Error('ERROR: No userId from req.body to query DB with');
+        if (!UserID) throw new Error('ERROR: No UserID from req.body to query DB with');
 
         let { data, error } = await supabase
             .from('Movies')
             .select()
-            .eq('UserID', userId)
+            .eq('UserID', UserID)
 
         if (error) {
             next({
@@ -41,85 +41,111 @@ movieController.fetchMovies = async (req, res, next) => {
 movieController.saveMovie = async (req, res, next) => {
     try {
         console.log('------> movieController.saveMovie START');
-        // const { userId, email, movieTitle } = req.body;
-        const userId = 78;
-        const email = 'email1';
-        const movieTitle = 'FakeMovie 23';
-
-        if (!email || !movieTitle) throw new Error('ERROR: No email, movieTitle, or userId from req.body to query DB with');
-
-        //check to see if user has already saved movie
-        let { data, error } = await supabase
-            .from('Users')
-            .select()
-            .eq('Email', email)
-
-        if (error) {
-            next({
-                log: `movieController.saveMovie - Supabase query/create error; ERROR: ${error}`,
-                message: {
-                    err: 'Error in movieController.saveMovie; Check server logs'
-                }
-            })
+        // const { UserID, movie } = req.body;
+        const UserID = 86;
+        // const email = 'email1@gmail.com';
+        const movie = {
+            MovieTitle: 'FakeMovie3',
+            Stars: 2,
+            Review: 'This movie was trash!'
         }
+        // const movieTitle = 'FakeMovie 23';
 
-        const userData = data[0]
-        const userMovies = userData.MyMovies;
+        if (!UserID || !movie) throw new Error('ERROR: No email or movie from req.body to query DB with');
 
-        async function helperFuncSaveMovie(userId, movieTitle) {
-            //write to Movies table to save movie
-            data = await supabase
-                .from('Movies')
-                .insert([ { MovieTitle: movieTitle, UserID: userId } ])
-                .select();
+        // //check to see if user has already saved movie
+        // let { data, error } = await supabase
+        //     .from('Users')
+        //     .select()
+        //     .eq('Email', email)
+
+        //check to see if movie has been saved by this specific user
+        // let { data, error } = await supabase
+        //     .from('Movies')
+        //     .select()
+        //     .match({ MovieTitle: movie.MovieTitle, UserID: UserID, })
+
+        // if (error) {
+        //     next({
+        //         log: `movieController.saveMovie - Supabase query/create error; ERROR: ${error}`,
+        //         message: {
+        //             err: 'Error in movieController.saveMovie; Check server logs'
+        //         }
+        //     })
+        // }
+
+        // const userData = data[0]
+        // const userMovies = userData.MyMovies;
+
+        // async function helperFuncSaveMovie(UserID, movie) {
+        //     const newMovie = { MovieTitle: movie.MovieTitle, Stars: movie.Stars, Review: movie.Review, UserID: UserID }
+        //     //write to Movies table to save movie
+        //     let data = await supabase
+        //         .from('Movies')
+        //         .insert([ newMovie ])
+        //         .select();
     
-            console.log('returned saved movie', data.data[0]);
-            res.locals.savedMovie = data.data[0]
-        }
+        //     console.log('returned saved movie', data.data[0]);
+        //     res.locals.savedMovie = data.data[0]
+        //     console.log('New Data after update movies array', data.data[0]);
+        // }
 
-        //if userMovies is null (user has no movies saved), save movie
-        if (userMovies === null || userMovies.length === 0) {
-            // console.log('------>NULL MOVIES CONDITIONAL');
-            //declare newMoviesArr to update column, since null is in place (can't push to null)
-            let newMoviesArr = [];
-            newMoviesArr.push(movieTitle);
-            data = await supabase
-                .from('Users')
-                .update([ { MyMovies: newMoviesArr } ])
-                .eq('Email', email)
-                .select();
+        // //if userMovies is null (user has no movies saved), save movie
+        // if (userMovies === null || userMovies.length === 0) {
+        //     // console.log('------>NULL MOVIES CONDITIONAL');
+        //     //declare newMoviesArr to update column, since null is in place (can't push to null)
+        //     let newMoviesArr = [];
+        //     newMoviesArr.push(movieTitle);
+        //     data = await supabase
+        //         .from('Users')
+        //         .update([ { MyMovies: newMoviesArr } ])
+        //         .eq('Email', email)
+        //         .select();
 
-            console.log('New Data after update movies array (NULL conditional)', data.data[0]);
-            await helperFuncSaveMovie(userId, movieTitle);
-            console.log('------> movieController.saveMovie END');
-            return next();
-        }
+        //     console.log('New Data after update movies array (NULL conditional)', data.data[0]);
+        //     await helperFuncSaveMovie(userId, movieTitle);
+        //     console.log('------> movieController.saveMovie END');
+        //     return next();
+        // }
         
-        //parse userMovies and check for movie, if found/saved, return error/notify
-        for (let i = 0; i < userMovies.length; i++) {
-            if (userMovies[i] === movieTitle) {
-                console.log('------> movieController.saveMovie END');
-                return next({
-                    log: `movieController.saveMovie - user already saved movie`,
-                    message: {
-                        err: 'Error in movieController.saveMovie; Check server logs'
-                    }
-                })
-            }
-        }
+        // //parse userMovies and check for movie, if found/saved, return error/notify
+        // for (let i = 0; i < userMovies.length; i++) {
+        //     if (userMovies[i] === movieTitle) {
+        //         console.log('------> movieController.saveMovie END');
+        //         return next({
+        //             log: `movieController.saveMovie - user already saved movie`,
+        //             message: {
+        //                 err: 'Error in movieController.saveMovie; Check server logs'
+        //             }
+        //         })
+        //     }
+        // }
 
-        //if movie isn't saved, save movie
-        userMovies.push(movieTitle);
-        data = await supabase
-            .from('Users')
-            .update([ { MyMovies: userMovies } ])
-            .eq('Email', email)
-            .select();
+        // //if movie isn't saved, save movie
+        // userMovies.push(movieTitle);
+        // data = await supabase
+        //     .from('Users')
+        //     .update([ { MyMovies: userMovies } ])
+        //     .eq('Email', email)
+        //     .select();
 
         // console.log(data.data[0]);
-        console.log('New Data after update movies array', data.data[0]);
+        // console.log('New Data after update movies array', data.data[0]);
 
-        helperFuncSaveMovie(userId, movieTitle);
+
+        // helperFuncSaveMovie(UserID, movie);
+
+
+        const newMovie = { MovieTitle: movie.MovieTitle, Stars: movie.Stars, Review: movie.Review, UserID: UserID }
+        //write to Movies table to save movie
+        let data = await supabase
+            .from('Movies')
+            .insert([ newMovie ])
+            .select();
+
+        console.log('returned saved movie', data.data[0]);
+        res.locals.savedMovie = data.data[0]
+        console.log('New Data after update movies array', data.data[0]);
         console.log('------> movieController.saveMovie END');
         return next();
     } catch (err) {
@@ -175,65 +201,71 @@ movieController.updateMovie = async (req, res, next) => {
 movieController.deleteMovie = async (req, res, next) => {
     try {
         console.log('------> movieController.deleteMovie START');
-        // const { userId, email, movieTitle } = req.body;
-        const userId = 78;
-        const email = 'email1';
-        const movieTitle = 'FakeMovie 21';
+        // const MovieID = req.params;
+        const MovieID = 35;
 
-        if (!email || !movieTitle) throw new Error('ERROR: No email, movieTitle, or userId from req.body to query DB with');
+        if (!MovieID) throw new Error('ERROR: MovieID from req.params to query DB with');
 
-        //check to see if user has already saved movie
-        let { data, error } = await supabase
-            .from('Users')
-            .select()
-            .eq('Email', email)
+        // //check to see if user has already saved movie
 
-        if (error) {
-            next({
-                log: `movieController.deleteMovie - Supabase query/create error; ERROR: ${error}`,
-                message: {
-                    err: 'Error in movieController.deleteMovie; Check server logs'
-                }
-            })
-        }
+        // let { data, error } = await supabase
+        //     .from('Users')
+        //     .select()
+        //     .eq('Email', email)
 
-        const userData = data[0]
-        const userMovies = userData.MyMovies;
+        // if (error) {
+        //     next({
+        //         log: `movieController.deleteMovie - Supabase query/create error; ERROR: ${error}`,
+        //         message: {
+        //             err: 'Error in movieController.deleteMovie; Check server logs'
+        //         }
+        //     })
+        // }
 
-        async function helperFuncDeleteMovie(userId, movieTitle) {
-            //write to Movies table to save movie
-            await supabase
-                .from('Movies')
-                .delete()
-                .match({ MovieTitle: movieTitle, UserID: userId });
-        }
+        // const userData = data[0]
+        // const userMovies = userData.MyMovies;
 
-        //if userMovies is null (user has no movies saved)
-        if (userMovies === null || userMovies.length === 0) {
-            console.log('User has not saved movie to delete');
-            console.log('------> movieController.deleteMovie END');
-            return next();
-        }
+        // async function helperFuncDeleteMovie(userId, movieTitle) {
+        //     //write to Movies table to save movie
+        //     await supabase
+        //         .from('Movies')
+        //         .delete()
+        //         .match({ MovieTitle: movieTitle, UserID: userId });
+        // }
+
+        // //if userMovies is null (user has no movies saved)
+        // if (userMovies === null || userMovies.length === 0) {
+        //     console.log('User has not saved movie to delete');
+        //     console.log('------> movieController.deleteMovie END');
+        //     return next();
+        // }
         
-        const newMoviesArr = [];
-        //parse userMovies and check for movie, if found/saved, return error/notify
-        for (let i = 0; i < userMovies.length; i++) {
-            if (userMovies[i] === movieTitle) {
-                continue;
-            }
-            newMoviesArr.push(userMovies[i]);
-        }
+        // const newMoviesArr = [];
+        // //parse userMovies and check for movie, if found/saved, return error/notify
+        // for (let i = 0; i < userMovies.length; i++) {
+        //     if (userMovies[i] === movieTitle) {
+        //         continue;
+        //     }
+        //     newMoviesArr.push(userMovies[i]);
+        // }
 
-        data = await supabase
-            .from('Users')
-            .update([ { MyMovies: newMoviesArr } ])
-            .eq('Email', email)
-            .select();
+        // data = await supabase
+        //     .from('Users')
+        //     .update([ { MyMovies: newMoviesArr } ])
+        //     .eq('Email', email)
+        //     .select();
 
-        // console.log(data.data[0]);
-        console.log('New Data after delete movies array', data.data[0]);
+        // // console.log(data.data[0]);
+        // console.log('New Data after delete movies array', data.data[0]);
 
-        helperFuncDeleteMovie(userId, movieTitle);
+        // helperFuncDeleteMovie(userId, movieTitle);
+        
+        //delete movie from DB
+        await supabase
+            .from('Movies')
+            .delete()
+            .match({ MovieID: MovieID });
+
         console.log('------> movieController.deleteMovie END');
         return next();
     } catch (err) {

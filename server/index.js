@@ -40,12 +40,12 @@ app.post('/signup',
   }
 );
 
-app.post('/signin', 
+app.get('/signin', 
   authController.verifyUser,
   cookieController.setSSIDCookie,
   sessionController.createSession,
   (req, res) => {
-    return res.status(200).json(res.locals);
+    return res.status(200).json(res.locals.userData);
   }
 );
 
@@ -59,23 +59,23 @@ sessionController.deleteSession,
 app.get('/mymovies',
   movieController.fetchMovies,
   (req, res) => {
-    return res.status(200).json(res.locals);
+    return res.status(200).json(res.locals.movies);
   }
 );
 
 app.post('/mymovies',
   movieController.saveMovie,
   (req, res) => {
-    return res.status(200).json(res.locals);
+    return res.status(200).json(res.locals.savedMovie);
   }
 );
 
-app.put('/mymovies',
-  movieController.updateMovie,
-  (req, res) => {
-    return res.status(200).json(res.locals);
-  }
-);
+// app.put('/mymovies',
+//   movieController.updateMovie,
+//   (req, res) => {
+//     return res.status(200).json(res.locals);
+//   }
+// );
 
 app.delete('/mymovies',
   movieController.deleteMovie,
