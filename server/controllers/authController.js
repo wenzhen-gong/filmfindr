@@ -8,11 +8,13 @@ authController.createUser = async (req, res, next) => {
     try {
         console.log('------> authController.createUser START');
         // const { username, email, password } = req.body;
-        const username = 'user1';
-        const email = 'email1'
-        const password = '123';
+        // const username = 'user1';
+        // const email = 'email1'
+        // const password = '123';
 
-        if (!username || !password) {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
             next({
                 log: `authController.createUser - missing input fields;`,
                 message: {
