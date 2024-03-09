@@ -2,15 +2,15 @@ import styled from "styled-components";
 
 export const TopRightButton = styled.button`
 
-color: white;
+color: #F5F5F5;
 padding: 5px 15px;
 border-radius: 5px;
 text-transform: uppercase;
 margin: 10px 0px;
 cursor: pointer;
-transition: ease color 250ms;
+transition: color 250ms;
 &:hover {
-  color: #444444 !important;
+  color: red !important;
 }
 &:disabled {
   cursor: default;
@@ -19,7 +19,9 @@ transition: ease color 250ms;
 `;
 
 export const TopLeftButton = styled.button`
-color: white;
+color: #F5F5F5;
+background-color: black;
+font-size: 20px;
 padding: 5px 15px;
 border-radius: 5px;
 text-transform: uppercase;

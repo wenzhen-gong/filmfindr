@@ -27,6 +27,26 @@ body::after {
   z-index: -1;   
 }
 
+.link{
+  color:#F5F5F5;
+  background:  black;
+  background-size: cover;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.link:hover {
+  color: red;
+  transition: color 250ms;
+}
+
+/* .nav-links{
+  top: 0;
+  right: 0;
+} */
+
+
 /* .questions-container {
   display: flex;
   flex-direction: column;
