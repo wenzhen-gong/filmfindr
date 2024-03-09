@@ -21,6 +21,16 @@ module.exports = {
     client: {
       progress: true,
     },
+    proxy: {
+      "/recommendation": {
+     target: "http://localhost:3000",
+     secure: false,
+      },
+     "/session": {
+     target: "http://localhost:3000",
+     secure: false,
+      },
+      },
   },
 
   plugins: [
