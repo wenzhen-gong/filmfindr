@@ -24,7 +24,7 @@ function App() {
         <div>
           {isLoggedIn ? (
             <TopLeftButton onClick={() => dispatch(openSignInModal())}>
-              hi, {user.username}
+              hi, {user.UserName}
             </TopLeftButton>
           ) : (
             <>
@@ -32,7 +32,7 @@ function App() {
                 Sign Up
               </TopLeftButton>
               <TopLeftButton onClick={() => dispatch(openSignInModal())}>
-                Log In
+                Sign In
               </TopLeftButton>
               {/* <TopLeftButton
                 onClick={() =>
@@ -59,8 +59,8 @@ function App() {
             <Link className="link" to="/">Log Out </Link>
           </TopRightButton>
         </div>
-        {/* <div>FOR TEST PURPOSE ONLY{user.name}</div> */}
       </div>
+      
       <SignUpModal />
       <SignInModal />
 

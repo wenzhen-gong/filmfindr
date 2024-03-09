@@ -1,37 +1,33 @@
-import {useState} from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStar, faEye } from '@fortawesome/free-solid-svg-icons'
-import './style.css';
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar, faHeart } from "@fortawesome/free-solid-svg-icons";
+import "./style.css";
 
 const MovieRecommendationModal = ({ movie }) => {
-  const [isWatched, setIsWatched] = useState(false);
-  const [isHovered, setIsHovered] = useState(false); 
-  const [reviews, setReviews] = useState([]);
-  const [rating, setRating] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
   const [hover, setHover] = useState(0);
-
-  const handleWatched = (event) => {
-    setIsWatched(!isWatched);
-    setReviews([]);
-    setRating(0);
-  };
+  const [reviews, setReviews] = useState(null);
+  const [rating, setRating] = useState(0);
+  const [isWatched, setIsWatched] = useState(false);
 
   const handleReview = (event) => {
     event.preventDefault();
-    const review = event.target[0].value.trim();
-    if (!review) {
-      event.target[0].value = '';
-      return;
-    }
-    setReviews([...reviews, review]);
-    event.target[0].value = '';
+    const review = event.target[0].value;
+    setReviews(review);
+    event.target[0].value = "";
   };
 
-  const handleReviewDelete = (index) => {
-    const newReviews = reviews.filter((review, i) => i !== index);
-    setReviews(newReviews);
+  const handleReviewDelete = () => {
+    setReviews(null);
   };
 
+  const handleWatched = (event) => {
+    setIsWatched(!isWatched);
+    setReviews(null);
+    setRating(0);
+    // call addMovie
+  };
   return (
     <div className='flex flex-col items-center p-4 bg-gray-800 text-gray-200 rounded shadow'>
       <div className='flex flex-col pb-5'>
@@ -82,6 +78,6 @@ const MovieRecommendationModal = ({ movie }) => {
 )}
     </div>
   );
-}
+};
 
 export default MovieRecommendationModal;
