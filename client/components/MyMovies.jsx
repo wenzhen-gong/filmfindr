@@ -13,5 +13,22 @@ export default function MyMovies() {
   if(loadingMovies === "idle") return <div>idle...</div>;
   if(loadingMovies === "loading") return <div>loading...</div>;
 
-  return <div>{movies[0].moviename}</div>;
+  return <div><table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Review</th>
+      <th>Rating</th>
+    </tr>
+  </thead>
+  <tbody>
+    {movies.map((movie) => (
+      <tr key={movie.id}>
+        <td>{movie.title}</td>
+        <td>{movie.review}</td>
+        <td>{movie.rating}</td>
+      </tr>
+    ))}
+  </tbody>
+</table></div>;
 }
