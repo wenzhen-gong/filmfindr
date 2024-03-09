@@ -243,27 +243,27 @@ export const fetchMovies = createAsyncThunk("fetchMovies", async (user) => {
 
 });
 
-export const addMovie = createAsyncThunk("addMovie", async (movie) => {
+export const addMovie = createAsyncThunk("addMovie", async ({movie, user}) => {
   let response = await fetch("", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(movie),
+    body: JSON.stringify({...movie, ...user}),
   });
   // What response am I expecting?
   response = await response.json();
 });
 
-export const deleteMovie = createAsyncThunk("deleteMovie", async (movie) => {
-  // let response = await fetch(`/${movie.MovieID}`, {
-  //   method: "DELETE",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  // });
-  // // What response am I expecting?
-  // response = await response.json();
+export const deleteMovie = createAsyncThunk("deleteMovie", async ({movie, user}) => {
+  let response = await fetch(`/${movie.MovieID}/${user.UserID}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  // What response am I expecting?
+  response = await response.json();
 });
 
 export const sendAnswersToApi = createAsyncThunk(
