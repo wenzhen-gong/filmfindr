@@ -243,14 +243,14 @@ export const addMovie = createAsyncThunk("addMovie", async (movie) => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(movie),
+    body: JSON.stringify({...movie, ...user}),
   });
   // What response am I expecting?
   response = await response.json();
 });
 
-export const deleteMovie = createAsyncThunk("deleteMovie", async (movie) => {
-  let response = await fetch(`/${movie.MovieID}`, {
+export const deleteMovie = createAsyncThunk("deleteMovie", async ({movie, user}) => {
+  let response = await fetch(`/${movie.MovieID}/${user.UserID}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

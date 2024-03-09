@@ -24,7 +24,7 @@ export default function MyMovies() {
           <FontAwesomeIcon
             icon={faHeart}
             color="red"
-            onClick = {() => dispatch(deleteMovie(movie))}
+            onClick = {() => dispatch(deleteMovie({movie, user}))}
           />
           <h3>{movie.MovieTitle}</h3>
           <p>Reviews:{movie.Review}</p>

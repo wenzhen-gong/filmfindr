@@ -2,9 +2,12 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faEye } from "@fortawesome/free-solid-svg-icons";
+import { addMovie } from "../utils/filmfindrSlice";
 import "./style.css";
 
 const MovieRecommendationModal = ({ movie }) => {
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.myReducers.user);
   const [isHovered, setIsHovered] = useState(false);
   const [hover, setHover] = useState(0);
   const [reviews, setReviews] = useState(null);
@@ -26,7 +29,7 @@ const MovieRecommendationModal = ({ movie }) => {
     setIsWatched(!isWatched);
     setReviews(null);
     setRating(0);
-    // call addMovie
+    dispatch(addMovie({movie, user}))
   };
   return (
     <div className='flex flex-col items-center p-4 bg-gray-800 text-gray-200 rounded shadow'>
