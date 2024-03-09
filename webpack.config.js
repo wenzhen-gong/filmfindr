@@ -17,9 +17,29 @@ module.exports = {
     },
     proxy: {
         '/': {
-            target: 'http://localhost:3000',
+          target: 'http://localhost:3000',
+          secure: false,
+          },
+        "/recommendation": {
+          target: "http://localhost:3000",
+          secure: false,
+           },
+        "/session": {
+          target: "http://localhost:3000",
+          secure: false,
+          },
+        "/signin": {
+          target: "http://localhost:3000",
+          secure: false,
+          },
+          "/mymovies": {
+            target: "http://localhost:3000",
             secure: false,
-        }
+            },
+            "/mymovies2": {
+              target: "http://localhost:3000",
+              secure: false,
+              },
     },
 
     // // for some reason HMR does not work properly. So liveReload is being used (hot has to be set to false to make liveReload work)
@@ -28,16 +48,6 @@ module.exports = {
     client: {
       progress: true,
     },
-    proxy: {
-      "/recommendation": {
-     target: "http://localhost:3000",
-     secure: false,
-      },
-     "/session": {
-     target: "http://localhost:3000",
-     secure: false,
-      },
-      },
   },
 
   plugins: [

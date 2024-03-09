@@ -43,7 +43,7 @@ app.post('/signup',
   }
 );
 
-app.get('/signin', 
+app.get('/signin/:email/:password', 
   authController.verifyUser,
   cookieController.setSSIDCookie,
   sessionController.createSession,
@@ -59,7 +59,7 @@ sessionController.deleteSession,
   }
 );
 
-app.get('/mymovies',
+app.post('/mymovies2',
   movieController.fetchMovies,
   (req, res) => {
     return res.status(200).json(res.locals.movies);

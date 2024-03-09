@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
 import {
   setError,
   sendAnswersToApi,
@@ -199,6 +200,14 @@ const ReactQuestions = () => {
     dispatch(setAnswers(movieRec));
   };
 
+  useEffect(() => {
+    if (error) {
+      if (window.confirm('The server is busy at the moment. Would you like to retry?')) {
+        dispatch(sendAnswersToApi(answers));
+      }
+    }
+  }, [error, dispatch, answers]);
+
   return (
     currentQuestion &&
     currentQuestionIndex <= inputs.length - 1 && (
@@ -266,7 +275,7 @@ const ReactQuestions = () => {
             </div>
           </div>
         </form>
-        {answers && <p  className='mt-4  text-center'>{JSON.stringify(answers)}</p>}
+        {/* {answers && <p  className='mt-4  text-center'>{JSON.stringify(answers)}</p>} */}
       </div>
     )
   );

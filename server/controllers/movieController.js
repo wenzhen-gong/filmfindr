@@ -5,8 +5,9 @@ const movieController = {};
 movieController.fetchMovies = async (req, res, next) => {
     try {
         console.log('------> movieControllers.fetchMovies START');
-        const { UserID } = req.params;
+        // const { UserID } = req.params;
         // const UserID = 86;
+        const {UserID} = req.body;
 
         if (!UserID) throw new Error('ERROR: No UserID from req.body to query DB with');
 
@@ -41,7 +42,11 @@ movieController.fetchMovies = async (req, res, next) => {
 movieController.saveMovie = async (req, res, next) => {
     try {
         console.log('------> movieController.saveMovie START');
-        const { UserID, movie } = req.body;
+        const { UserID } = req.body;
+        console.log(req.body);
+        const newMovie = { MovieTitle: req.body.title, Picture: req.body.picture, Overview: req.body.overview, Year: req.body.year, UserID: UserID }
+
+      
         // const UserID = 86;
         // const movie = {
         //     MovieTitle: 'FakeMovie3',
@@ -49,7 +54,7 @@ movieController.saveMovie = async (req, res, next) => {
         //     Review: 'This movie was trash!'
         // }
 
-        if (!UserID || !movie) throw new Error('ERROR: No email or movie from req.body to query DB with');
+        if (!UserID) throw new Error('ERROR: No UserID from req.body to query DB with');
 
         // //check to see if user has already saved movie
         // let { data, error } = await supabase
@@ -77,6 +82,7 @@ movieController.saveMovie = async (req, res, next) => {
 
         // async function helperFuncSaveMovie(UserID, movie) {
         //     const newMovie = { MovieTitle: movie.MovieTitle, Stars: movie.Stars, Review: movie.Review, UserID: UserID }
+        
         //     //write to Movies table to save movie
         //     let data = await supabase
         //         .from('Movies')
@@ -134,7 +140,6 @@ movieController.saveMovie = async (req, res, next) => {
         // helperFuncSaveMovie(UserID, movie);
 
 
-        const newMovie = { MovieTitle: movie.MovieTitle, Stars: movie.Stars, Review: movie.Review, UserID: UserID }
         //write to Movies table to save movie
         let data = await supabase
             .from('Movies')

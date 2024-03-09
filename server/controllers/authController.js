@@ -96,9 +96,13 @@ authController.createUser = async (req, res, next) => {
 authController.verifyUser = async (req, res, next) => {
     try {
         console.log('------> authController.verifyUser START');
-        const {email, password} = req.params;
+        const email = req.params.email;
+        const password = req.params.password;
         // const email = 'email1@gmail.com'
         // const password = '123';
+        // console.log(req.params);
+        // console.log(email);
+        // console.log(password);
 
         if (!email || !password) {
             next({

@@ -27,7 +27,7 @@ export default function MyMovies() {
             onClick = {() => dispatch(deleteMovie({movie, user}))}
           />
           <h3>{movie.MovieTitle}</h3>
-          <p>Reviews:{movie.Review}</p>
+          {/* <p>Reviews:{movie.Review}</p>
           <div>
             {[...Array(5)].map((star, i) => {
               const ratingValue = i + 1;
@@ -47,7 +47,7 @@ export default function MyMovies() {
                 </label>
               );
             })}
-          </div>
+          </div> */}
         </div>
       </>
     );
