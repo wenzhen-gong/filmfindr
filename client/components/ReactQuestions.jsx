@@ -119,6 +119,7 @@ const inputs = [
           return newAnswers;
         });
         setCurrentQuestionIndex(currentQuestionIndex - 1);
+        setMovieRec([]);
       }
     };
   
@@ -176,15 +177,16 @@ const inputs = [
   
     return (
       currentQuestion && currentQuestionIndex <= inputs.length - 1 && (
-        <div className='flex flex-col items-center justify-center'>
-          <h1 className='text-4xl font-bold mb-8'>Movie Questions</h1>
-          <form onSubmit={handleNext} name='questions' className='w-full max-w-md bg-white p-6 rounded shadow-md'>
-            <h3 className='flex items-align text-xl font-semibold mb-4'>{currentQuestion.question}</h3>
+        <div className='flex flex-col items-center justify-center text-gray-200 w-screen h-screen'>
+          <h1 className='text-6xl font-bold mb-8'>Movie Questions</h1>
+          <form onSubmit={handleNext} name='questions' className={`flex flex-col space-between bg-gray-800 w-[80vw] p-10 rounded shadow-md`}>
+           <div className='flex flex-col space-between'>
+            <h3 className='flex justify-center items-align text-4xl font-semibold mb-4'>{currentQuestion.question}</h3>
             {currentQuestion.type === 'text' ? (
-              <input type="text" placeholder={currentQuestion.placeholder} value={currentInput} onChange={(e) => setCurrentInput(e.target.value)} className='w-full p-2 border border-gray-300 rounded mb-4' />
+              <input type="text" placeholder={currentQuestion.placeholder} value={currentInput} onChange={(e) => setCurrentInput(e.target.value)} className='p-2 w-full border border-gray-600 rounded mb-4 bg-gray-700 text-white text-center mx-auto' />
             ) : (
               currentQuestion.options.map((option, index) => (
-                <div key={index} className='flex items-center mb-2'>
+                <div key={index} className='flex justify-center items-center text-2xl mb-2'>
                   <input 
                     type={currentQuestion.type} 
                     id={option} 
@@ -192,22 +194,23 @@ const inputs = [
                     value={option} 
                     onChange={handleChange} 
                     checked={currentQuestion.type === 'checkbox' ? (answers[`question_${currentQuestionIndex + 1}`] || []).includes(option) : answers[`question_${currentQuestionIndex + 1}`] === option}
-                    className='mr-2'
+                    className='mr-2 cursor-pointer'
                   />
-                  <label htmlFor={option} className='text-gray-700'>{option}</label>
+                  <label htmlFor={option} className='text-gray-300'>{option}</label>
                 </div>
               ))
             )}
             <div className='flex justify-between'>
-              {currentQuestionIndex >= 0 && <button type="button" onClick={handlePrevious} className='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'>Back</button>}
-              {currentQuestionIndex === 5 && <button type="button" onClick={handleList} className='px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600'>Add</button>}
-              <button type="submit" className='px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600'>Next</button>
+              {currentQuestionIndex >= 0 && <button type="button" onClick={handlePrevious} className='px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600'>Back</button>}
+              {currentQuestionIndex === 5 && <button type="button" onClick={handleList} className='px-4 py-2 bg-stone-900 text-white rounded hover:bg-stone-800'>Add</button>}
+              <button type="submit" className='px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600'>Next</button>
             </div>
-            {movieRec.length > 0 && <ul className='mt-4'>{movieRec.map((movie, index) => <li key={index} className='flex justify-between items-center border-b py-2'>{movie} <button type='button' onClick={() => handleListDelete(index)} className='px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600'>X</button></li>)}</ul>}
-            {error && <p className='text-red-500 mt-2'>{error}</p>}
+            </div>  
+            {movieRec.length > 0 && <ul className='mt-2 w-1/4 mx-auto flex flex-col items-center'>{movieRec.map((movie, index) => <li key={index} className='flex justify-between items-center border-b py-2 w-full'>{movie} <button type='button' onClick={() => handleListDelete(index)} className='px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600'>X</button></li>)}</ul>}
+            {error && <p className='text-red-500 text-2xl font-bold justify-center text-center items-center mt-2'>{error}</p>}
           </form>
           
-          {answers && <p className='mt-4 text-center'>{JSON.stringify(answers)}</p>}
+          {answers && <p className='mt-4  text-center'>{JSON.stringify(answers)}</p>}
         </div>
       )
     );
