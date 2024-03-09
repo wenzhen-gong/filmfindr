@@ -194,6 +194,8 @@ export const signUp = createAsyncThunk("signUp", async (event) => {
   event.preventDefault();
   console.log(event.target[0].value);
   console.log(event.target[1].value);
+  console.log(event.target[2].value);
+
 });
 export const signIn = createAsyncThunk("signIn", async (event) => {
   // need to change to sign in logic (db call with select)
@@ -205,11 +207,20 @@ export const signIn = createAsyncThunk("signIn", async (event) => {
   return { username: "fakename" };
 });
 
-export const fetchMovies = createAsyncThunk("fetchMovies", async () => {
+export const fetchMovies = createAsyncThunk("fetchMovies", async (movie) => {
   // need to change to fetch movies logic (db call with select)
   let response = await fetch("https://swapi.dev/api/people/1");
   response = await response.json();
   console.log("fetching movies");
+  return movie;
+});
+
+// temp
+export const addMovie = createAsyncThunk("addMovie", async () => {
+  // need to change to add movies logic (db call with insert)
+  let response = await fetch("https://swapi.dev/api/people/1");
+  response = await response.json();
+  console.log("adding movies");
   return { moviename: "fakemovie" };
 });
 
