@@ -40,8 +40,10 @@ const MovieRecommendationModal = ({ movie }) => {
         onClick={handleWatched}
       />
       </div>
-      <h3 className='mt-2 text-xl font-bold'>{movie.title}</h3>
-      <img className='mt-2 rounded' src={movie.image} alt={movie.title}/>
+      <h3 className='mt-2 text-xl font-bold'>{movie.title} ({movie.year})</h3>
+      <img className='mt-2 rounded' src={movie.picture} alt={movie.title}/>
+      <p>Overview: {movie.overview}</p>
+      <p>Reason: {movie.reason}</p>
       
       {isWatched && (
   <>

@@ -270,7 +270,7 @@ export const sendAnswersToApi = createAsyncThunk(
   "sendAnswersToApi",
   async (answers, { rejectWithValue }) => {
     try {
-      const response = await fetch("", {
+      const response = await fetch("http://localhost:3000/recommendation", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -278,6 +278,7 @@ export const sendAnswersToApi = createAsyncThunk(
         body: JSON.stringify(answers),
       });
       const data = await response.json();
+      console.log("data: ", data)
       return data;
     } catch (err) {
       return rejectWithValue(err.message);
