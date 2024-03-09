@@ -6,7 +6,7 @@ const MyMoviesContainer = () => {
   const isLoggedIn = useSelector((state) => state.myReducers.isLoggedIn);
   return (
     <div>
-      {isLoggedIn? <MyMovies/>:'Log in to Access your movie collections'}
+      {isLoggedIn? <MyMovies />:'Log in to Access your movie collections'}
     </div>
   );
 };

@@ -101,7 +101,7 @@ export const filmfindrSlice = createSlice({
       } else if (Array.isArray(action.payload)) {
         state.answers = {
           ...state.answers,
-          [name]: action.payload,
+          [name]: [...state.movieRec],
         };
       } else {
         state.answers = {};
@@ -115,6 +115,8 @@ export const filmfindrSlice = createSlice({
     setMovieRec: (state, action) => {
       if (typeof action.payload === "string") {
         state.movieRec = [...state.movieRec, action.payload];
+      } else if (Array.isArray(action.payload)){
+        state.movieRec = [];
       } else {
         state.movieRec = state.movieRec.filter(
           (movie, i) => i !== action.payload
@@ -268,7 +270,7 @@ export const sendAnswersToApi = createAsyncThunk(
   "sendAnswersToApi",
   async (answers, { rejectWithValue }) => {
     try {
-      const response = await fetch("", {
+      const response = await fetch("http://localhost:3000/recommendation", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -276,6 +278,7 @@ export const sendAnswersToApi = createAsyncThunk(
         body: JSON.stringify(answers),
       });
       const data = await response.json();
+      console.log("data: ", data)
       return data;
     } catch (err) {
       return rejectWithValue(err.message);

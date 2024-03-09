@@ -16,10 +16,9 @@ body {
 } */
 
 body::after {
-  background: url('./statics/movie.jpeg');
+  background: black;
   background-size: cover;
   content: "";
-  opacity: 0.5;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -28,7 +27,27 @@ body::after {
   z-index: -1;   
 }
 
-.questions-container {
+.link{
+  color:#F5F5F5;
+  background:  black;
+  background-size: cover;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.link:hover {
+  color: red;
+  transition: color 250ms;
+}
+
+/* .nav-links{
+  top: 0;
+  right: 0;
+} */
+
+
+/* .questions-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -57,5 +76,5 @@ body::after {
   display: flex;
   flex-direction: row;
   justify-content: space-between; 
-  /* flex-wrap: wrap; */
-}
+  flex-wrap: wrap;
+} */

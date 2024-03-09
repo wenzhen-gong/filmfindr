@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+var cors = require('cors');
 
 const app = express();
 const PORT = 3000;
@@ -10,6 +11,7 @@ const authController = require('./controllers/authController.js');
 const cookieController = require('./controllers/cookieController.js');
 const sessionController = require('./controllers/sessionController.js');
 const movieController = require('./controllers/movieController.js');
+const apiController = require('./controllers/apiController')
 
 const MONGO_URI = 'mongodb+srv://jaycruz2905:codesmith@reinforcement.vyfuoyn.mongodb.net/?retryWrites=true&w=majority&appName=Reinforcement';
 
@@ -21,6 +23,7 @@ mongoose.connect(MONGO_URI, {
 
 
 app.use(cookieParser());
+app.use(cors())
 app.use(express.json());
 app.use('/', express.static(path.resolve(__dirname, '../dist')));
 
@@ -84,6 +87,11 @@ app.delete('/mymovies',
   }
 );
 
+app.post('/recommendation', apiController.callGemini, apiController.callTMDB, (req, res) =>{
+  const recsArr = res.locals.recsArr;
+  
+  return res.status(200).json(recsArr);
+});
 
 
 app.use((err, req, res, next) => {

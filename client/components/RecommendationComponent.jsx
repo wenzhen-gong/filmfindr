@@ -43,17 +43,17 @@ const RecommendationComponent = () => {
   return (
     <>
       {movieData.length > 0 && (
-        <div>
-          <button onClick={() => dispatch(sendAnswersToApi(answers))}>
+        <div className='flex flex-col items-center justify-center bg-black text-gray-200'>
+          <button onClick={() => dispatch(sendAnswersToApi(answers))} className='bg-gray-800 hover:bg-red-600 text-gray-200 font-bold py-2 px-4 m-5 rounded'>
             More Recommendations
           </button>
-          <h1>Movie Recommendations</h1>
-          <div className="recommendations-row">
+          <h1 className='text-4xl font-bold my-5 pt-40'>Movie Recommendations</h1>
+          <div className='grid grid-cols-3 gap-4'>
             {movieData.map((movie, index) => (
               <MovieRecommendationModal key={index} movie={movie} />
             ))}
           </div>
-          <button onClick={resetRecommendations}>
+          <button onClick={resetRecommendations} className='bg-gray-800 hover:bg-red-600 text-gray-200 font-bold py-2 px-4 m-10 rounded'>
             Looking for something different?
           </button>
         </div>
