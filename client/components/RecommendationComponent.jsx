@@ -38,15 +38,15 @@ const resetRecommendations = () => {
 return (
   <>
     {movieData.length > 0 && (
-      <div className='flex flex-col items-center justify-center'>
-        <h1 className='text-4xl font-bold my-5'>Movie Recommendations</h1>
-        <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-5 rounded' onClick={() => resendAnswersToApi(answers)}>More Recommendations</button>
+      <div className='flex flex-col items-center justify-center bg-black text-gray-200'>
+        <h1 className='text-4xl font-bold my-5 pt-40'>Movie Recommendations</h1>
+        <button className='bg-gray-800 hover:bg-red-600 text-gray-200 font-bold py-2 px-4 m-5 rounded' onClick={() => resendAnswersToApi(answers)}>More Recommendations</button>
         <div className='grid grid-cols-3 gap-4'>
     {movieData.map((movie, index) => (
       <MovieRecommendationModal key={index} movie={movie} />
     ))}
       </div>
-        <button className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 m-10 rounded' onClick={resetRecommendations}>Looking for something different?</button>
+        <button className='bg-gray-800 hover:bg-red-600 text-gray-200 font-bold py-2 px-4 m-10 rounded' onClick={resetRecommendations}>Looking for something different?</button>
       </div>
     )}
   </>

@@ -20,7 +20,7 @@ function App() {
 
   return (
     <>
-      <div className="grid grid-cols-2 grid-rows-1">
+    <div className="flex justify-between bg-black p-2 fixed top-0 right-0 left-0 opacity-90">
         <div>
           {isLoggedIn ? (
             <TopLeftButton onClick={() => dispatch(openSignInModal())}>
@@ -48,15 +48,15 @@ function App() {
             </>
           )}
         </div>
-        <div className="grid grid-cols-4 grid-rows-1">
+        <div className="nav-links">
           <TopRightButton>
-            <Link to="/">Home</Link>
+            <Link className="link" to="/">Home</Link>
           </TopRightButton>
           <TopRightButton>
-            <Link to="mymovies">My Movies</Link>
+            <Link className="link" to="mymovies">My Movies</Link>
           </TopRightButton>
           <TopRightButton onClick={() => dispatch(handlelogOut())}>
-            <Link  to="/">Log Out </Link>
+            <Link className="link" to="/">Log Out </Link>
           </TopRightButton>
         </div>
         {/* <div>FOR TEST PURPOSE ONLY{user.name}</div> */}
@@ -67,6 +67,7 @@ function App() {
       <div>
         <Outlet />
       </div>
+
     </>
   );
 }
