@@ -5,6 +5,7 @@ const initialState = {
   isLoggedIn: false,
   signUpModalOpen: false,
   signInModalOpen: false,
+  signInError: null,
   user: null,
   movies: [],
   loadingMovies: "idle",
@@ -70,11 +71,17 @@ export const filmfindrSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
+    setSignInError: (state, action) => {
+      state.signInError = action.payload;
+    
+    },
 
     setCurrentQuestionIndex: (state, action) => {
       state.currentQuestionIndex = action.payload;
     },
-
+    resetSignInError: (state) => {
+      state.signInError = null;
+    },
     setAnswers: (state, action) => {
       const name = `question_${state.currentQuestionIndex + 1}`;
 
@@ -146,6 +153,9 @@ export const filmfindrSlice = createSlice({
       state.signInModalOpen = false;
       state.user = action.payload;
     });
+    builder.addCase(signIn.rejected, (state, action) => {
+      state.signInError = action.error;
+    });
     builder.addCase(signUp.fulfilled, (state, action) => {
       state.isLoggedIn = true;
       state.signUpModalOpen = false;
@@ -184,6 +194,7 @@ export const {
   closeSignUpModal,
   openSignInModal,
   closeSignInModal,
+  resetSignInError,
 
   setError,
   setCurrentQuestionIndex,
@@ -211,7 +222,7 @@ export const signUp = createAsyncThunk("signUp", async (event) => {
   return user;
 });
 
-export const signIn = createAsyncThunk("signIn", async (event) => {
+export const signIn = createAsyncThunk("signIn", async (event, thunkAPI) => {
   event.preventDefault();
   const searchParams = new URLSearchParams({
     email: event.target[0].value,
@@ -219,17 +230,23 @@ export const signIn = createAsyncThunk("signIn", async (event) => {
   });
   console.log(searchParams.toString());
 
-  let response = await fetch(`http://localhost:3000/signin/${event.target[0].value}/${event.target[1].value}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const user = await response.json();
-  console.log(user);
+  try {
+    let response = await fetch(`http://localhost:3000/signin/${event.target[0].value}/${event.target[1].value}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-  // assuming fetch request will return corresponding user object after db call
-  return user;
+    if (!response.ok) {
+      throw new Error('Server responded with a non-200 status');
+    }
+
+    const user = await response.json();
+    return user;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
 });
 
 export const fetchMovies = createAsyncThunk("fetchMovies", async ({user}) => {
@@ -294,7 +311,7 @@ export const sendAnswersToApi = createAsyncThunk(
       console.log("data: ", data)
       return data;
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue(err);
     }
   }
 );
