@@ -61,23 +61,30 @@ const RecommendationComponent = () => {
 
   return (
     <>
+    <div className='flex flex-col items-center justify-center bg-black text-gray-200'>
       {movieData.length > 0 && (
-        <div className='flex flex-col items-center justify-center bg-black text-gray-200'>
-          <h1 className='text-4xl font-bold my-2 pt-2 m-2'>Movie Recommendations</h1>
-          <button onClick={() => dispatch(sendAnswersToApi(answers))} className='bg-gray-800 hover:bg-red-600 text-gray-200 font-bold py-2 px-2 m-5 rounded'>
-            More Recommendations
-          </button>
+        <div className='flex flex-col items-center justify-center bg-black text-gray-200 m-4'>
           <div className='grid grid-cols-3 gap-4'>
             {movieData.map((movie, index) => (
               <MovieRecommendationModal key={index} movie={movie} />
             ))}
           </div>
-          <button onClick={resetRecommendations} className='bg-gray-800 hover:bg-red-600 text-gray-200 font-bold py-2 px-4 m-10 rounded'>
+          <div className='flex items-center justify-center'>
+          <button onClick={() => {
+            resetRecommendations();
+            window.scrollTo(0, 0);
+          }} className='bg-gray-800 hover:bg-red-600 text-gray-200 font-bold py-2 px-4 m-10 rounded'>
             Looking for something different?
           </button>
+          <button onClick={() => dispatch(sendAnswersToApi(answers))} className='bg-gray-800 hover:bg-red-600 text-gray-200 font-bold py-2 px-4 m-10 rounded'>
+            More Recommendations
+          </button>
+          </div>
         </div>
       )}
+          </div>
     </>
+
   );
 };
 

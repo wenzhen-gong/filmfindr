@@ -51,7 +51,7 @@ const MovieRecommendationModal = ({ movie }) => {
 
   };
   return (
-    <div className='flex flex-col items-center p-4 bg-gray-800 text-gray-200 rounded shadow'>
+    <div className='flex flex-col items-center p-2 m-2 bg-gray-800 text-gray-200 rounded shadow'>
       <div className='flex flex-col pb-5'>
       {user && (
       <>
@@ -67,7 +67,7 @@ const MovieRecommendationModal = ({ movie }) => {
       )}
       </div>
       <h3 className='mt-2 text-xl font-bold'>{movie.title} ({movie.year})</h3>
-      <img className='mt-2 rounded' src={movie.picture} alt={movie.title}/>
+      <img className='mt-2 rounded w-96 h-96 object-contain' src={movie.picture} alt={movie.title}/>
       <p className='font-bold pt-5'>Overview: <span className='font-normal'>{movie.overview}</span></p>
       <p className='font-bold'>Reason: <span className='font-normal'>{movie.reason}</span></p>
       {/* {isWatched && (
