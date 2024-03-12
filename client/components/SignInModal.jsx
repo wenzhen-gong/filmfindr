@@ -15,7 +15,10 @@ export default function SignInModal() {
       <Modal.Header className="bg-gray-800 text-white" closeButton>
         <Modal.Title>Sign In Here</Modal.Title>
       </Modal.Header>
-      <Form className="bg-gray-800 text-white" onSubmit={(event) => dispatch(signIn(event))}>
+      <Form className="bg-gray-800 text-white" onSubmit={(event) => {
+        dispatch(signIn(event))
+        dispatch(closeSignInModal())
+      }}>
         <Modal.Body>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>

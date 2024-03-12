@@ -13,30 +13,30 @@ const initialState = {
   answers: {},
   currentQuestionIndex: 0,
   movieData: [
-    {
-      picture:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt4633694%2F&psig=AOvVaw",
-      title: "Movie1",
-      genre: "Action",
-      description: "Movie1 description",
-      reason: "movie1 resson",
-    },
-    {
-      picture:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt4633694%2F&psig=AOvVaw",
-      title: "Movie2",
-      genre: "Action",
-      description: "Movie2 description",
-      reason: "movie2 resson",
-    },
-    {
-      picture:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt4633694%2F&psig=AOvVaw",
-      title: "Movie3",
-      genre: "Action",
-      description: "Movie3 description",
-      reason: "movie3 resson",
-    },
+    // {
+    //   picture:
+    //     "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt4633694%2F&psig=AOvVaw",
+    //   title: "Movie1",
+    //   genre: "Action",
+    //   description: "Movie1 description",
+    //   reason: "movie1 resson",
+    // },
+    // {
+    //   picture:
+    //     "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt4633694%2F&psig=AOvVaw",
+    //   title: "Movie2",
+    //   genre: "Action",
+    //   description: "Movie2 description",
+    //   reason: "movie2 resson",
+    // },
+    // {
+    //   picture:
+    //     "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.imdb.com%2Ftitle%2Ftt4633694%2F&psig=AOvVaw",
+    //   title: "Movie3",
+    //   genre: "Action",
+    //   description: "Movie3 description",
+    //   reason: "movie3 resson",
+    // },
   ],
   error: null,
   currentInput: "",
@@ -146,6 +146,11 @@ export const filmfindrSlice = createSlice({
       state.signInModalOpen = false;
       state.user = action.payload;
     });
+    builder.addCase(signUp.fulfilled, (state, action) => {
+      state.isLoggedIn = true;
+      state.signUpModalOpen = false;
+      state.user = action.payload;
+    });
 
     builder.addCase(fetchMovies.pending, (state, action) => {
       state.loadingMovies = "loading";
@@ -155,8 +160,9 @@ export const filmfindrSlice = createSlice({
       state.movies = action.payload;
     });
 
-    builder.addCase(deleteMovie.fulfilled, (state) => {
-      state.myMoviesFlag = !state.myMoviesFlag;
+    builder.addCase(deleteMovie.fulfilled, (state, action) => {
+      state.loadingMovies = "idle";
+      state.movies = state.movies.filter((movie) => movie.MovieID !== action.payload);
     });
 
     // David's asynchronous reducer
@@ -165,6 +171,10 @@ export const filmfindrSlice = createSlice({
     });
     builder.addCase(sendAnswersToApi.rejected, (state, action) => {
       console.error("Failed to send answers:", action.payload);
+      state.error = action.error;
+    });
+    builder.addCase(addMovie.fulfilled, (state, action) => {
+      state.movies = [...state.movies, action.payload];
     });
   },
 });
@@ -182,13 +192,14 @@ export const {
   setMovieRec,
   resetMovieData,
 } = filmfindrSlice.actions;
+
 export default filmfindrSlice.reducer;
 
 export const signUp = createAsyncThunk("signUp", async (event) => {
   event.preventDefault();
   const requestBody = {email: event.target[0].value, password: event.target[1].value};
 
-  let response = await fetch("", {
+  let response = await fetch("http://localhost:3000/signup", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -196,67 +207,68 @@ export const signUp = createAsyncThunk("signUp", async (event) => {
     body: JSON.stringify(requestBody),
   });
   // What response am I expecting?
-  response = await response.json();
+  const user = await response.json();
+  return user;
 });
 
 export const signIn = createAsyncThunk("signIn", async (event) => {
   event.preventDefault();
-  // const searchParams = new URLSearchParams({
-  //   email: event.target[0].value,
-  //   password: event.target[1].value,
-  // });
+  const searchParams = new URLSearchParams({
+    email: event.target[0].value,
+    password: event.target[1].value,
+  });
+  console.log(searchParams.toString());
 
-  // let response = await fetch("?" + searchParams, {
-  //   method: "GET",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  // });
-  // const user = await response.json();
+  let response = await fetch(`http://localhost:3000/signin/${event.target[0].value}/${event.target[1].value}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const user = await response.json();
+  console.log(user);
 
   // assuming fetch request will return corresponding user object after db call
-  return { UserID: 79, UserName: "user1", email: "email1" };
+  return user;
 });
 
-export const fetchMovies = createAsyncThunk("fetchMovies", async (user) => {
+export const fetchMovies = createAsyncThunk("fetchMovies", async ({user}) => {
   // assuming fetch request will return corresponding movies object after db call
 
-  // let response = await fetch(
-  //   "?" +
-  //     new URLSearchParams({
-  //       UserID: user.UserID,
-  //     }),
-  //   {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   }
-  // );
-  // const movies = await response.json();
-  return [{
-    MovieID: 17,
-    MovieTitle: "FakeMovie 1",
-    Stars: 3,
-    Review: "FakeReview1",
-  }];
-
+  let response = await fetch(
+    "http://localhost:3000/mymovies2", 
+    //+
+      // new URLSearchParams({
+      //   UserID: user.UserID,
+      // }),
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({user})
+    }
+  );
+  const movies = await response.json();
+ console.log(movies)
+  return movies;
 });
 
 export const addMovie = createAsyncThunk("addMovie", async ({movie, user}) => {
-  let response = await fetch("", {
+ 
+  let response = await fetch("http://localhost:3000/mymovies", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({...movie, ...user}),
+    body: JSON.stringify({movie, user}),
   });
   // What response am I expecting?
   response = await response.json();
 });
 
 export const deleteMovie = createAsyncThunk("deleteMovie", async ({movie, user}) => {
-  let response = await fetch(`/${movie.MovieID}/${user.UserID}`, {
+  let response = await fetch(`http://localhost:3000/deleteMovies/${movie.MovieID}/${user.UserID}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

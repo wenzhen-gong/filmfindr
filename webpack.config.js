@@ -10,10 +10,37 @@ module.exports = {
   devtool: 'inline-source-map',
 
   devServer: {
-    // // uncomment when serving bundled files directly from /dist after building
-    // static: {
-    //   directory: path.resolve(__dirname, 'dist'),
-    // }
+    port: 8080,
+    static: {
+        publicPath: '/',
+        directory: path.join(__dirname, '/dist')
+    },
+    proxy: {
+        '/': {
+          target: 'http://localhost:3000',
+          secure: false,
+          },
+        "/recommendation": {
+          target: "http://localhost:3000",
+          secure: false,
+           },
+        "/session": {
+          target: "http://localhost:3000",
+          secure: false,
+          },
+        "/signin": {
+          target: "http://localhost:3000",
+          secure: false,
+          },
+          "/mymovies": {
+            target: "http://localhost:3000",
+            secure: false,
+            },
+            "/mymovies2": {
+              target: "http://localhost:3000",
+              secure: false,
+              },
+    },
 
     // // for some reason HMR does not work properly. So liveReload is being used (hot has to be set to false to make liveReload work)
     hot: false,
@@ -21,16 +48,6 @@ module.exports = {
     client: {
       progress: true,
     },
-    proxy: {
-      "/recommendation": {
-     target: "http://localhost:3000",
-     secure: false,
-      },
-     "/session": {
-     target: "http://localhost:3000",
-     secure: false,
-      },
-      },
   },
 
   plugins: [

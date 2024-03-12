@@ -1,33 +1,88 @@
 const express = require('express');
 const path = require('path');
+// const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 var cors = require('cors');
 
 const app = express();
 const PORT = 3000;
 
+const authController = require('./controllers/authController.js');
+const cookieController = require('./controllers/cookieController.js');
+// const sessionController = require('./controllers/sessionController.js');
+const movieController = require('./controllers/movieController.js');
 const apiController = require('./controllers/apiController')
 
+// const MONGO_URI = 'mongodb+srv://jaycruz2905:codesmith@reinforcement.vyfuoyn.mongodb.net/?retryWrites=true&w=majority&appName=Reinforcement';
+
+// mongoose.connect(MONGO_URI, {
+//   dbName: 'Reinforcement',
+// })
+//   .then(() => console.log('------> Connected to Mongo DB.'))
+//   .catch(err => console.log(err));
+
+
+app.use(cookieParser());
 app.use(cors())
 app.use(express.json());
-
 app.use('/', express.static(path.resolve(__dirname, '../dist')));
 
 
 app.get('/',
-(req, res) => {
-  return res.status(200).sendFile(path.join(__dirname, '../../dist/index.html'));
-}
+  (req, res) => {
+    return res.status(200).sendFile(path.join(__dirname, '../../dist/index.html'));
+  }
 );
 
 app.post('/signup', 
-  //insert middleware here
+  authController.createUser,
+  cookieController.setSSIDCookie,
+  // sessionController.createSession,
+  (req, res) => {
+    return res.status(200).json(res.locals.userData);
+  }
+);
+
+app.get('/signin/:email/:password', 
+  authController.verifyUser,
+  cookieController.setSSIDCookie,
+  // sessionController.createSession,
+  (req, res) => {
+    return res.status(200).json(res.locals.userData);
+  }
+);
+
+app.delete('/signout', 
+// sessionController.deleteSession,
+  cookieController.deleteCookie,
   (req, res) => {
     return res.status(200).json(res.locals);
   }
 );
 
-app.post('/signin', 
-  //insert middleware here
+app.post('/mymovies2',
+  movieController.fetchMovies,
+  (req, res) => {
+    return res.status(200).json(res.locals.movies);
+  }
+);
+
+app.post('/mymovies',
+  movieController.saveMovie,
+  (req, res) => {
+    return res.status(200).json(res.locals.savedMovie);
+  }
+);
+
+// app.put('/mymovies',
+//   movieController.updateMovie,
+//   (req, res) => {
+//     return res.status(200).json(res.locals);
+//   }
+// );
+
+app.delete('/deleteMovies/:MovieId/:UserId',
+  movieController.deleteMovie,
   (req, res) => {
     return res.status(200).json(res.locals);
   }
