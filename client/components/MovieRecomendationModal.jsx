@@ -18,13 +18,13 @@ const MovieRecommendationModal = ({ movie }) => {
   // const [rating, setRating] = useState(0);
   
   // useEffect(() => {
-  //   console.log(movies);
-  // }, [movies]);
+  //   console.log(isLogged);
+  // }, [isLogged]);
 
   useEffect(() => {
-    if (loadingMovies === "idle") dispatch(fetchMovies({user}));
+    if (loadingMovies === "idle"  && isLogged) dispatch(fetchMovies({user}));
     
-  }, [loadingMovies, dispatch, user]);
+  }, [loadingMovies, dispatch, user, isLogged]);
   if (loadingMovies === "loading") return <div>loading...</div>;
 
   
@@ -58,7 +58,7 @@ const MovieRecommendationModal = ({ movie }) => {
       <span className="flex justify-center font-bold ml-2 text-lg p-2 text-center">Watched?</span> 
       <FontAwesomeIcon
         icon={faEye}
-        className={`text-lg cursor-pointer ${isLogged && (movies.find((m) => m.MovieTitle === movie.title)) !== undefined || isHovered ? 'text-red-500' : 'text-gray-500'}`}
+        className={`text-lg cursor-pointer ${(movies.find((m) => m.MovieTitle === movie.title)) !== undefined || isHovered ? 'text-red-500' : 'text-gray-500'}`}
         onMouseEnter={() => setIsHovered(true)} 
         onMouseLeave={() => setIsHovered(false)} 
         onClick={handleWatched}
