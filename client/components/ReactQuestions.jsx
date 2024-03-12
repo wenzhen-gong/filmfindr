@@ -200,14 +200,6 @@ const ReactQuestions = () => {
     dispatch(setAnswers(movieRec));
   };
 
-  useEffect(() => {
-    if (error && error.status >=  500 && error.status < 600) {
-      if (window.confirm('The server is busy at the moment. Would you like to retry?')) {
-        dispatch(sendAnswersToApi(answers));
-      }
-    }
-  }, [error, dispatch, answers]);
-
   return (
     currentQuestion &&
     currentQuestionIndex <= inputs.length - 1 && (

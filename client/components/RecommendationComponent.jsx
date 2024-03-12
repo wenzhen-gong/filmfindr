@@ -1,10 +1,12 @@
 import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
 import MovieRecommendationModal from "./MovieRecomendationModal";
 import {
   sendAnswersToApi,
   setCurrentQuestionIndex,
   setAnswers,
   resetMovieData,
+  setError
 } from "../utils/filmfindrSlice";
 import "./style.css";
 
@@ -12,6 +14,7 @@ const RecommendationComponent = () => {
   const dispatch = useDispatch();
   const answers = useSelector((state) => state.myReducers.answers);
   const movieData = useSelector((state) => state.myReducers.movieData);
+  const error = useSelector((state) => state.myReducers.error);
 
   // const resendAnswersToApi = async (answers) => {
   //   try {
@@ -35,10 +38,25 @@ const RecommendationComponent = () => {
   //   console.log(answers);
   // };
 
+  
+
+  useEffect(() => {
+      if (
+        error === 'Gemini servers are overloaded. Please try again' ||
+        error === 'Having problems with TMDB. Please try again'
+      ) {
+        if (window.confirm('The server is busy at the moment. Would you like to retry?')) {
+          dispatch(sendAnswersToApi(answers));
+        }
+      }
+  }, [error, dispatch]);
+
   const resetRecommendations = () => {
     dispatch(resetMovieData());
     dispatch(setAnswers({}));
+    dispatch(setError(null));
     dispatch(setCurrentQuestionIndex(0));
+
   };
 
   return (

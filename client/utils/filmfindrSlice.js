@@ -181,7 +181,7 @@ export const filmfindrSlice = createSlice({
     });
     builder.addCase(sendAnswersToApi.rejected, (state, action) => {
       console.error("Failed to send answers:", action.payload);
-      state.error = action.error;
+      state.error = action.payload;
     });
     builder.addCase(addMovie.fulfilled, (state, action) => {
       state.movies = [...state.movies, action.payload];
@@ -309,6 +309,9 @@ export const sendAnswersToApi = createAsyncThunk(
       });
       const data = await response.json();
       console.log("data: ", data)
+      if(data.err) {
+        return rejectWithValue(data.err);
+      }
       return data;
     } catch (err) {
       return rejectWithValue(err);
