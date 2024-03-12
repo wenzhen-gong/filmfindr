@@ -8,6 +8,7 @@ const initialState = {
   signInError: null,
   user: null,
   movies: [],
+  loading: false,
   loadingMovies: "idle",
   myMoviesFlag: true,
   // below are David's states
@@ -177,9 +178,14 @@ export const filmfindrSlice = createSlice({
 
     // David's asynchronous reducer
     builder.addCase(sendAnswersToApi.fulfilled, (state, action) => {
+      state.loading = false;
       state.movieData = action.payload;
     });
+    builder.addCase(sendAnswersToApi.pending, (state, action) => {
+      state.loading = true;
+    });
     builder.addCase(sendAnswersToApi.rejected, (state, action) => {
+      state.loading = false;
       console.error("Failed to send answers:", action.payload);
       state.error = action.payload;
     });
