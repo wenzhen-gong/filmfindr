@@ -63,12 +63,7 @@ const RecommendationComponent = () => {
     <>
     <div className='flex flex-col items-center justify-center bg-black text-gray-200'>
       {movieData.length > 0 && (
-        <div className='flex flex-col items-center justify-center bg-black text-gray-200 m-4'>
-          <div className='grid grid-cols-3 gap-4'>
-            {movieData.map((movie, index) => (
-              <MovieRecommendationModal key={index} movie={movie} />
-            ))}
-          </div>
+        <div className='flex flex-col items-center justify-center bg-black text-gray-200 p-10 m-4'>
           <div className='flex items-center justify-center'>
           <button onClick={() => {
             resetRecommendations();
@@ -80,6 +75,12 @@ const RecommendationComponent = () => {
             More Recommendations
           </button>
           </div>
+          <div className='grid grid-cols-3 gap-4'>
+            {movieData.map((movie, index) => (
+              <MovieRecommendationModal key={index} movie={movie} />
+            ))}
+          </div>
+
         </div>
       )}
           </div>
