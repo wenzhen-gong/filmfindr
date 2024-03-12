@@ -9,17 +9,17 @@ const MovieRecommendationModal = ({ movie }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.myReducers.user);
   const loadingMovies = useSelector((state) => state.myReducers.loadingMovies);
+  const isLogged = useSelector((state) => state.myReducers.isLoggedIn);
   const movies = useSelector(state => state.myReducers.movies);
   const [isHovered, setIsHovered] = useState(false);
 
   // const [hover, setHover] = useState(0);
   // const [reviews, setReviews] = useState(null);
   // const [rating, setRating] = useState(0);
-  const [isWatched, setIsWatched] = useState(false);
   
-  useEffect(() => {
-    console.log(movies);
-  }, [movies]);
+  // useEffect(() => {
+  //   console.log(movies);
+  // }, [movies]);
 
   useEffect(() => {
     if (loadingMovies === "idle") dispatch(fetchMovies({user}));
@@ -58,7 +58,7 @@ const MovieRecommendationModal = ({ movie }) => {
       <span className="flex justify-center font-bold ml-2 text-lg p-2 text-center">Watched?</span> 
       <FontAwesomeIcon
         icon={faEye}
-        className={`text-lg cursor-pointer ${(movies.find((m) => m.MovieTitle === movie.title)) !== undefined || isHovered ? 'text-red-500' : 'text-gray-500'}`}
+        className={`text-lg cursor-pointer ${isLogged && (movies.find((m) => m.MovieTitle === movie.title)) !== undefined || isHovered ? 'text-red-500' : 'text-gray-500'}`}
         onMouseEnter={() => setIsHovered(true)} 
         onMouseLeave={() => setIsHovered(false)} 
         onClick={handleWatched}
