@@ -2,7 +2,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { useSelector, useDispatch } from "react-redux";
-import { closeSignUpModal, signUp } from "../utils/filmfindrSlice";
+import { closeSignUpModal, signUp, signIn } from "../utils/filmfindrSlice";
 import React from "react";
 import { useState } from "react";
 

@@ -7,7 +7,7 @@ movieController.fetchMovies = async (req, res, next) => {
         console.log('------> movieControllers.fetchMovies START');
         // const { UserID } = req.params;
         // const UserID = 86;
-        const {UserID} = req.body;
+        const { user: { UserID } } = req.body;
 
         if (!UserID) throw new Error('ERROR: No UserID from req.body to query DB with');
 
@@ -40,23 +40,19 @@ movieController.fetchMovies = async (req, res, next) => {
 }
 
 movieController.saveMovie = async (req, res, next) => {
+    console.log(req.body)
     try {
         console.log('------> movieController.saveMovie START');
-        const { UserID } = req.body;
-        console.log(req.body);
-        const newMovie = { MovieTitle: req.body.title, Picture: req.body.picture, Overview: req.body.overview, Year: req.body.year, UserID: UserID }
+        const { user: { UserID }, movie: { title, picture, overview, year } } = req.body;
+        const newMovie = { MovieTitle: title, Picture: picture, Overview: overview, Year: year, UserID: UserID }
 
       
-        // const UserID = 86;
-        // const movie = {
-        //     MovieTitle: 'FakeMovie3',
-        //     Stars: 2,
-        //     Review: 'This movie was trash!'
-        // }
+
+
 
         if (!UserID) throw new Error('ERROR: No UserID from req.body to query DB with');
 
-        // //check to see if user has already saved movie
+        //check to see if user has already saved movie
         // let { data, error } = await supabase
         //     .from('Users')
         //     .select()
@@ -203,12 +199,12 @@ movieController.updateMovie = async (req, res, next) => {
 
 movieController.deleteMovie = async (req, res, next) => {
     try {
-        console.log('------> movieController.deleteMovie START');
-        const {movieId, UserID} = req.params;
-        // const movieId = 35;
-        console.log('------> req.query: ',req.query);
+        console.log('------> movieController.deleteMovie START')
+        
+        const { MovieId, UserId } = req.params;
+        console.log('------> req.params: ', MovieId, UserId);
 
-        if (!movieId) throw new Error('ERROR: movieId from req.params to query DB with');
+        if (!MovieId) throw new Error('ERROR: movieId from req.params to query DB with');
 
         // //check to see if user has already saved movie
 
@@ -259,19 +255,23 @@ movieController.deleteMovie = async (req, res, next) => {
         //     .eq('Email', email)
         //     .select();
 
-        // // console.log(data.data[0]);
+        // console.log(data.data[0]);
         // console.log('New Data after delete movies array', data.data[0]);
 
         // helperFuncDeleteMovie(userId, movieTitle);
         
-        //delete movie from DB
-        await supabase
-            .from('Movies')
-            .delete()
-            .match({ movieId: movieId, UserID: UserID });
+        // delete movie from DB
 
+    const MovieIdNumber = Number(MovieId);
+    const UserIdNumber = Number(UserId);
+
+        await supabase
+        .from('Movies')
+        .delete()
+        .match({ MovieID: MovieIdNumber, UserID: UserIdNumber });
         console.log('------> movieController.deleteMovie END');
         return next();
+        
     } catch (err) {
         return next({
             log: `movieController.deleteMovie - writing to database for movies error; ERROR: ${err}`,
@@ -279,7 +279,9 @@ movieController.deleteMovie = async (req, res, next) => {
               err: 'Error in movieController.deleteMovie; Check server logs',
             },
         });
+        
     }
+    
 }
 
 module.exports = movieController;

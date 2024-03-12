@@ -1,11 +1,12 @@
 import { Link, Outlet } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   handlelogIn,
   handlelogOut,
   openSignUpModal,
   openSignInModal,
+  sendAnswersToApi
 } from "../utils/filmfindrSlice";
 import { TopRightButton, TopLeftButton } from "./styledcomponents";
 import SignUpModal from "./SignUpModal";
@@ -16,7 +17,19 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function App() {
   const isLoggedIn = useSelector((state) => state.myReducers.isLoggedIn);
   const user = useSelector((state) => state.myReducers.user);
+  const answers = useSelector((state) => state.myReducers.answers);
+  const error = useSelector((state) => state.myReducers.error);
+
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (error && error.status >=  500 && error.status < 600) {
+      if (window.confirm('The server is busy at the moment. Would you like to retry?')) {
+        dispatch(sendAnswersToApi(answers));
+      }
+    }
+  }, [error, dispatch, answers]);
 
   return (
     <>

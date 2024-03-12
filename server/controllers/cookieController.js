@@ -55,4 +55,22 @@ cookieController.setSSIDCookie = async (req, res, next) => {
     }
 }
 
+cookieController.deleteCookie = (req, res, next) => {
+    try {
+        console.log('------> cookieController.deleteCookie START');
+        res.clearCookie('ssid');
+        res.clearCookie('u');
+        console.log('------> SSID cookie deleted!');
+        console.log('------> U cookie deleted!');
+        console.log('------> cookieController.deleteCookie END');
+        return next();
+    } catch (err) {
+        return next({
+            log: `cookieController.deleteCookie - error deleting cookie; ERROR: ${err}`,
+            status: 400,
+            message: { err: 'Error in cookieController.deleteCookie. Check server logs' }
+          });
+    }
+}
+
 module.exports = cookieController;

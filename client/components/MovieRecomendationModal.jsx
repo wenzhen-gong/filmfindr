@@ -1,39 +1,62 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar, faEye } from "@fortawesome/free-solid-svg-icons";
-import { addMovie } from "../utils/filmfindrSlice";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { addMovie, deleteMovie, fetchMovies} from "../utils/filmfindrSlice";
 import "./style.css";
 
 const MovieRecommendationModal = ({ movie }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.myReducers.user);
+  const loadingMovies = useSelector((state) => state.myReducers.loadingMovies);
+  const movies = useSelector(state => state.myReducers.movies);
   const [isHovered, setIsHovered] = useState(false);
-  const [hover, setHover] = useState(0);
-  const [reviews, setReviews] = useState(null);
-  const [rating, setRating] = useState(0);
+
+  // const [hover, setHover] = useState(0);
+  // const [reviews, setReviews] = useState(null);
+  // const [rating, setRating] = useState(0);
   const [isWatched, setIsWatched] = useState(false);
+  
 
-  const handleReview = (event) => {
-    event.preventDefault();
-    const review = event.target[0].value;
-    setReviews(review);
-    event.target[0].value = "";
-  };
 
-  const handleReviewDelete = () => {
-    setReviews(null);
-  };
+  useEffect(() => {
+    if (loadingMovies === "idle") dispatch(fetchMovies({user}));
+    
+  }, [loadingMovies, dispatch, user, movies, isWatched]);
+  if (loadingMovies === "loading") return <div>loading...</div>;
+
+  // const handleReview = (event) => {
+  //   event.preventDefault();
+  //   const review = event.target[0].value;
+  //   setReviews(review);
+  //   event.target[0].value = "";
+  // };
+
+  // const handleReviewDelete = () => {
+  //   setReviews(null);
+  // };
 
   const handleWatched = (event) => {
-    setIsWatched(!isWatched);
-    setReviews(null);
-    setRating(0);
-    dispatch(addMovie({movie, user}))
+    if(!isWatched) {
+      dispatch(addMovie({movie, user}))
+      setIsWatched(!isWatched);
+     } else {
+      setIsWatched(!isWatched);
+      dispatch(deleteMovie({movie, user}))
+
+
+// Log the movie title you're looking for
+      // movie = movies.find((m) => m.MovieTitle === movie.title);
+      // console.log(movie)
+      // dispatch(deleteMovie({movie, user}))
+     }
+
   };
   return (
     <div className='flex flex-col items-center p-4 bg-gray-800 text-gray-200 rounded shadow'>
       <div className='flex flex-col pb-5'>
+      {user && (
+      <>
       <span className="flex justify-center font-bold ml-2 text-lg p-2 text-center">Watched?</span> 
       <FontAwesomeIcon
         icon={faEye}
@@ -42,13 +65,14 @@ const MovieRecommendationModal = ({ movie }) => {
         onMouseLeave={() => setIsHovered(false)} 
         onClick={handleWatched}
       />
+      </>
+      )}
       </div>
       <h3 className='mt-2 text-xl font-bold'>{movie.title} ({movie.year})</h3>
       <img className='mt-2 rounded' src={movie.picture} alt={movie.title}/>
-      <p>Overview: {movie.overview}</p>
-      <p>Reason: {movie.reason}</p>
-      
-      {isWatched && (
+      <p className='font-bold pt-5'>Overview: <span className='font-normal'>{movie.overview}</span></p>
+      <p className='font-bold'>Reason: <span className='font-normal'>{movie.reason}</span></p>
+      {/* {isWatched && (
   <>
     <form className='mt-2 w-full' onSubmit={handleReview} name='recommendations'>
       <input className='w-full p-2 border border-gray-600 rounded bg-gray-700 text-white text-center' type="text" placeholder="Add a review" maxLength="40"/>
@@ -81,7 +105,7 @@ const MovieRecommendationModal = ({ movie }) => {
       })}
     </div>
   </>
-)}
+)} */}
     </div>
   );
 };

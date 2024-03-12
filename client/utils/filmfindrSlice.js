@@ -146,6 +146,11 @@ export const filmfindrSlice = createSlice({
       state.signInModalOpen = false;
       state.user = action.payload;
     });
+    builder.addCase(signUp.fulfilled, (state, action) => {
+      state.isLoggedIn = true;
+      state.signUpModalOpen = false;
+      state.user = action.payload;
+    });
 
     builder.addCase(fetchMovies.pending, (state, action) => {
       state.loadingMovies = "loading";
@@ -155,8 +160,9 @@ export const filmfindrSlice = createSlice({
       state.movies = action.payload;
     });
 
-    builder.addCase(deleteMovie.fulfilled, (state) => {
-      state.myMoviesFlag = !state.myMoviesFlag;
+    builder.addCase(deleteMovie.fulfilled, (state, action) => {
+      state.loadingMovies = "idle";
+      state.movies = state.movies.filter((movie) => movie.MovieID !== action.payload);
     });
 
     // David's asynchronous reducer
@@ -166,6 +172,9 @@ export const filmfindrSlice = createSlice({
     builder.addCase(sendAnswersToApi.rejected, (state, action) => {
       console.error("Failed to send answers:", action.payload);
       state.error = action.error;
+    });
+    builder.addCase(addMovie.fulfilled, (state, action) => {
+      state.movies = [...state.movies, action.payload];
     });
   },
 });
@@ -183,6 +192,7 @@ export const {
   setMovieRec,
   resetMovieData,
 } = filmfindrSlice.actions;
+
 export default filmfindrSlice.reducer;
 
 export const signUp = createAsyncThunk("signUp", async (event) => {
@@ -197,7 +207,8 @@ export const signUp = createAsyncThunk("signUp", async (event) => {
     body: JSON.stringify(requestBody),
   });
   // What response am I expecting?
-  response = await response.json();
+  const user = await response.json();
+  return user;
 });
 
 export const signIn = createAsyncThunk("signIn", async (event) => {
@@ -221,7 +232,7 @@ export const signIn = createAsyncThunk("signIn", async (event) => {
   return user;
 });
 
-export const fetchMovies = createAsyncThunk("fetchMovies", async (user) => {
+export const fetchMovies = createAsyncThunk("fetchMovies", async ({user}) => {
   // assuming fetch request will return corresponding movies object after db call
 
   let response = await fetch(
@@ -235,28 +246,29 @@ export const fetchMovies = createAsyncThunk("fetchMovies", async (user) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(user.UserID)
+      body: JSON.stringify({user})
     }
   );
   const movies = await response.json();
-  console.log(movies);
+ console.log(movies)
   return movies;
 });
 
 export const addMovie = createAsyncThunk("addMovie", async ({movie, user}) => {
+ 
   let response = await fetch("http://localhost:3000/mymovies", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({...movie, ...user}),
+    body: JSON.stringify({movie, user}),
   });
   // What response am I expecting?
   response = await response.json();
 });
 
 export const deleteMovie = createAsyncThunk("deleteMovie", async ({movie, user}) => {
-  let response = await fetch(`/${movie.MovieID}/${user.UserID}`, {
+  let response = await fetch(`http://localhost:3000/deleteMovies/${movie.MovieID}/${user.UserID}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

@@ -201,7 +201,7 @@ const ReactQuestions = () => {
   };
 
   useEffect(() => {
-    if (error) {
+    if (error && error.status >=  500 && error.status < 600) {
       if (window.confirm('The server is busy at the moment. Would you like to retry?')) {
         dispatch(sendAnswersToApi(answers));
       }
@@ -259,21 +259,10 @@ const ReactQuestions = () => {
                 </button>
               )}
               <button type="submit" className='px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600'>Next</button>
-              {movieRec.length > 0 && (
-                <ul className='mt-2 w-1/4 mx-auto flex flex-col items-center'>
-                  {movieRec.map((movie, index) => (
-                    <li key={index}>
-                      {movie}{" "}
-                      <button type="button" onClick={() => handleListDelete(index)}>
-                        X
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-              {error && <p className='text-red-500 text-2xl font-bold justify-center text-center items-center mt-2'>{error}</p>}
             </div>
           </div>
+          {movieRec.length > 0 && <ul className='mt-2 w-1/4 mx-auto flex flex-col items-center'>{movieRec.map((movie, index) => <li key={index} className='flex justify-between items-center border-b py-2 w-full'>{movie} <button type='button' onClick={() => handleListDelete(index)} className='px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600'>X</button></li>)}</ul>}
+              {error && <p className='text-red-500 text-2xl font-bold justify-center text-center items-center mt-2'>{error}</p>}
         </form>
         {/* {answers && <p  className='mt-4  text-center'>{JSON.stringify(answers)}</p>} */}
       </div>

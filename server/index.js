@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 var cors = require('cors');
 
@@ -9,17 +9,17 @@ const PORT = 3000;
 
 const authController = require('./controllers/authController.js');
 const cookieController = require('./controllers/cookieController.js');
-const sessionController = require('./controllers/sessionController.js');
+// const sessionController = require('./controllers/sessionController.js');
 const movieController = require('./controllers/movieController.js');
 const apiController = require('./controllers/apiController')
 
-const MONGO_URI = 'mongodb+srv://jaycruz2905:codesmith@reinforcement.vyfuoyn.mongodb.net/?retryWrites=true&w=majority&appName=Reinforcement';
+// const MONGO_URI = 'mongodb+srv://jaycruz2905:codesmith@reinforcement.vyfuoyn.mongodb.net/?retryWrites=true&w=majority&appName=Reinforcement';
 
-mongoose.connect(MONGO_URI, {
-  dbName: 'Reinforcement',
-})
-  .then(() => console.log('------> Connected to Mongo DB.'))
-  .catch(err => console.log(err));
+// mongoose.connect(MONGO_URI, {
+//   dbName: 'Reinforcement',
+// })
+//   .then(() => console.log('------> Connected to Mongo DB.'))
+//   .catch(err => console.log(err));
 
 
 app.use(cookieParser());
@@ -37,23 +37,24 @@ app.get('/',
 app.post('/signup', 
   authController.createUser,
   cookieController.setSSIDCookie,
-  sessionController.createSession,
+  // sessionController.createSession,
   (req, res) => {
-    return res.status(200).json(res.locals);
+    return res.status(200).json(res.locals.userData);
   }
 );
 
 app.get('/signin/:email/:password', 
   authController.verifyUser,
   cookieController.setSSIDCookie,
-  sessionController.createSession,
+  // sessionController.createSession,
   (req, res) => {
     return res.status(200).json(res.locals.userData);
   }
 );
 
 app.delete('/signout', 
-sessionController.deleteSession,
+// sessionController.deleteSession,
+  cookieController.deleteCookie,
   (req, res) => {
     return res.status(200).json(res.locals);
   }
@@ -80,7 +81,7 @@ app.post('/mymovies',
 //   }
 // );
 
-app.delete('/deleteMovies/:movieId:userId',
+app.delete('/deleteMovies/:MovieId/:UserId',
   movieController.deleteMovie,
   (req, res) => {
     return res.status(200).json(res.locals);
