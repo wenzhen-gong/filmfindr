@@ -265,6 +265,7 @@ export const addMovie = createAsyncThunk("addMovie", async ({movie, user}) => {
   });
   // What response am I expecting?
   response = await response.json();
+  return response;
 });
 
 export const deleteMovie = createAsyncThunk("deleteMovie", async ({movie, user}) => {
