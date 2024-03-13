@@ -38,7 +38,7 @@ const geminiController = {
     async callGemini (req, res, next) {
         try {
         const model = genAI.getGenerativeModel({ model: "gemini-pro"});
-
+        console.log("req.body: ", req.body);
         let q1, q2, q3, q4, q5, q6, q7;
 
             for (const key in req.body) {
@@ -71,16 +71,15 @@ const geminiController = {
                   
                     const prompt = `I'm looking for three movie recommendations based on these criteria:
                 
-                    1. I am ${q1} today
+                    1. I feel ${q1} today
                     2. ${q2}
                     3. I'm interested in these genres: ${q3}
-                    4. ${q4}
-                    5. ${q5}
+                    4. I want movies ${q4}
+                    5. Is the age-appropriateness rating of the movie important to me? ${q5}
                     6. I want a movie that is similar to these movies: ${q6}
                        I've already seen these movies. Please do not recommend them to me: ${q7}
                 
-                    You must return a javacript array of JSON objects, each object with a "Title" property, a "Year" property assigned the release year and a "Reason" property based on the above prompt.
-                    
+                    You must return a javascript array of JSON objects, each object with a "Title" property, a "Year" property assigned the release year and a "Reason" property based on the above prompt.
                     `;
                   
                     const result = await model.generateContent(prompt);
