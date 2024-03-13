@@ -9,21 +9,25 @@ const MovieRecommendationModal = ({ movie }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.myReducers.user);
   const loadingMovies = useSelector((state) => state.myReducers.loadingMovies);
+  const isLogged = useSelector((state) => state.myReducers.isLoggedIn);
   const movies = useSelector(state => state.myReducers.movies);
   const [isHovered, setIsHovered] = useState(false);
 
   // const [hover, setHover] = useState(0);
   // const [reviews, setReviews] = useState(null);
   // const [rating, setRating] = useState(0);
-  const [isWatched, setIsWatched] = useState(false);
   
-
+  // useEffect(() => {
+  //   console.log(isLogged);
+  // }, [isLogged]);
 
   useEffect(() => {
-    if (loadingMovies === "idle") dispatch(fetchMovies({user}));
+    if (loadingMovies === "idle"  && isLogged) dispatch(fetchMovies({user}));
     
-  }, [loadingMovies, dispatch, user, movies, isWatched]);
+  }, [loadingMovies, dispatch, user, isLogged]);
   if (loadingMovies === "loading") return <div>loading...</div>;
+
+  
 
   // const handleReview = (event) => {
   //   event.preventDefault();
@@ -37,30 +41,24 @@ const MovieRecommendationModal = ({ movie }) => {
   // };
 
   const handleWatched = (event) => {
-    if(!isWatched) {
-      dispatch(addMovie({movie, user}))
-      setIsWatched(!isWatched);
-     } else {
-      setIsWatched(!isWatched);
-      dispatch(deleteMovie({movie, user}))
-
-
-// Log the movie title you're looking for
-      // movie = movies.find((m) => m.MovieTitle === movie.title);
-      // console.log(movie)
-      // dispatch(deleteMovie({movie, user}))
-     }
+    let foundMovie = movies.find((m) => m.MovieTitle === movie.title);
+    if(foundMovie === undefined) {
+      dispatch(addMovie({ movie, user }));
+      console.log(movies);
+    } else {
+      dispatch(deleteMovie({ movie:foundMovie, user }));
+    }
 
   };
   return (
-    <div className='flex flex-col items-center p-4 bg-gray-800 text-gray-200 rounded shadow'>
+    <div className='flex flex-col items-center p-2 m-2 bg-gray-800 text-gray-200 rounded shadow'>
       <div className='flex flex-col pb-5'>
       {user && (
       <>
       <span className="flex justify-center font-bold ml-2 text-lg p-2 text-center">Watched?</span> 
       <FontAwesomeIcon
         icon={faEye}
-        className={`text-lg cursor-pointer ${isWatched || isHovered ? 'text-red-500' : 'text-gray-500'}`}
+        className={`text-lg cursor-pointer ${(movies.find((m) => m.MovieTitle === movie.title)) !== undefined || isHovered ? 'text-red-500' : 'text-gray-500'}`}
         onMouseEnter={() => setIsHovered(true)} 
         onMouseLeave={() => setIsHovered(false)} 
         onClick={handleWatched}
@@ -69,7 +67,7 @@ const MovieRecommendationModal = ({ movie }) => {
       )}
       </div>
       <h3 className='mt-2 text-xl font-bold'>{movie.title} ({movie.year})</h3>
-      <img className='mt-2 rounded' src={movie.picture} alt={movie.title}/>
+      <img className='mt-2 rounded w-96 h-96 object-contain' src={movie.picture} alt={movie.title}/>
       <p className='font-bold pt-5'>Overview: <span className='font-normal'>{movie.overview}</span></p>
       <p className='font-bold'>Reason: <span className='font-normal'>{movie.reason}</span></p>
       {/* {isWatched && (
