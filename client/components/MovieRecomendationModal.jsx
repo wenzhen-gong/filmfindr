@@ -68,6 +68,7 @@ const MovieRecommendationModal = ({ movie }) => {
       </div>
       <h3 className='mt-2 text-xl font-bold'>{movie.title} ({movie.year})</h3>
       <img className='mt-2 rounded w-96 h-96 object-contain' src={movie.picture} alt={movie.title}/>
+      <p className='font-bold pt-5'>Genres: <span className='font-normal'>{movie.genre.map(genre => genre).join(', ')}</span></p>
       <p className='font-bold pt-5'>Overview: <span className='font-normal'>{movie.overview}</span></p>
       <p className='font-bold'>Reason: <span className='font-normal'>{movie.reason}</span></p>
       {/* {isWatched && (

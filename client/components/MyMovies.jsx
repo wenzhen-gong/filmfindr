@@ -10,14 +10,15 @@ export default function MyMovies() {
   const movies = useSelector((state) => state.myReducers.movies);
   const loadingMovies = useSelector((state) => state.myReducers.loadingMovies);
   const [deleteCount, setDeleteCount] = useState(0)
-
+  
+  // console.log("user from state.myReducers.user", user)
   useEffect(() => {
     if (loadingMovies === "idle") dispatch(fetchMovies({user}));
     
   }, [loadingMovies, dispatch, user, deleteCount]);
   if (loadingMovies === "loading") return <div>loading...</div>;
- 
-
+  
+  
   return (
     <>
 <div className="flex flex-col items-center justify-center min-h-screen mt-16 overflow-auto">

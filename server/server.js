@@ -11,7 +11,7 @@ const authController = require('./controllers/authController.js');
 const cookieController = require('./controllers/cookieController.js');
 // const sessionController = require('./controllers/sessionController.js');
 const movieController = require('./controllers/movieController.js');
-const apiController = require('./controllers/apiController')
+const apiController = require('./controllers/apiController.js')
 
 // const MONGO_URI = 'mongodb+srv://jaycruz2905:codesmith@reinforcement.vyfuoyn.mongodb.net/?retryWrites=true&w=majority&appName=Reinforcement';
 
@@ -88,7 +88,7 @@ app.delete('/deleteMovies/:MovieId/:UserId',
   }
 );
 
-app.post('/recommendation', apiController.callGemini, apiController.callTMDB, (req, res) =>{
+app.post('/recommendation', /*movieController.fetchMovies,*/ apiController.callGemini, apiController.callTMDB, (req, res) =>{
   const recsArr = res.locals.recsArr;
   
   return res.status(200).json(recsArr);

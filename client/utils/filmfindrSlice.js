@@ -185,7 +185,7 @@ export const filmfindrSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(sendAnswersToApi.rejected, (state, action) => {
-      state.loading = false;
+      state.loading = true;
       console.error("Failed to send answers:", action.payload);
       state.error = action.payload;
     });

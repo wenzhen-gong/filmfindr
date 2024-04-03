@@ -34,11 +34,11 @@ const genreTable = {
     37: "Western"
   };
 
-const geminiController = {
+const apiController = {
     async callGemini (req, res, next) {
         try {
         const model = genAI.getGenerativeModel({ model: "gemini-pro"});
-        console.log("req.body: ", req.body);
+        // console.log("req.body in gemini: ", req.body);
         let q1, q2, q3, q4, q5, q6, q7;
 
             for (const key in req.body) {
@@ -57,6 +57,7 @@ const geminiController = {
                         break;
                     case "question_5":
                         q5 = req.body[key];
+                        q5 === "Yes" ? q5 = "These movies absolutely must be kid friendly" : q5 = "Movie can be any rating";
                         break;
                     case "question_6":
                         q6 = req.body[key].join(", ");
@@ -74,14 +75,15 @@ const geminiController = {
                     1. I feel ${q1} today
                     2. ${q2}
                     3. I'm interested in these genres: ${q3}
-                    4. I want movies ${q4}
-                    5. Is the age-appropriateness rating of the movie important to me? ${q5}
+                    4. I want movies from ${q4}
+                    5. ${q5}
                     6. I want a movie that is similar to these movies: ${q6}
                        I've already seen these movies. Please do not recommend them to me: ${q7}
                 
                     You must return a javascript array of JSON objects, each object with a "Title" property, a "Year" property assigned the release year and a "Reason" property based on the above prompt.
                     `;
                   
+                    // console.log("Prompt: ", prompt)
                     const result = await model.generateContent(prompt);
                     const response = await result.response;
                     let responseStr = response.text();
@@ -122,12 +124,11 @@ const geminiController = {
         async callTMDB(req, res, next) {
 
             const suggestionsArr = res.locals.suggestionsArr;
+
+            // console.log("passed in suggestionsArr: ", suggestionsArr)
+
             const filteredResultsArr = [];
             const recsArr = [];
-
-            // console.log("suggestionsArr from res.locals: ", suggestionsArr);
-            // console.log("type from res.locals: ", typeof suggestionsArr);
-
 
         try {
             for (const movie of suggestionsArr) {
@@ -141,6 +142,8 @@ const geminiController = {
 
                 let results = data.results;
 
+                // console.log(`Results of ${searchTitle} to TMDB:`, results)
+
                 if (results.length !== 1) {
                     results = results.filter(movie => movie.title === searchTitle);
                 }
@@ -148,7 +151,7 @@ const geminiController = {
                 filteredResultsArr.push({ ...results[0], reason, year });
             }
 
-        // console.log("filteredResultsArr: ", filteredResultsArr);
+        // console.log("made TMDB fetch and made filteredResultsArr: ", filteredResultsArr);
 
         filteredResultsArr.forEach(movie => {
             const genres = movie.genre_ids.map(genreId => genreTable[genreId]);
@@ -184,4 +187,4 @@ const geminiController = {
             
 }
 
-module.exports = geminiController;
+module.exports = apiController;

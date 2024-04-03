@@ -45,9 +45,13 @@ const RecommendationComponent = () => {
         error === 'Gemini servers are overloaded. Please try again' ||
         error === 'Having problems with TMDB. Please try again'
       ) {
-        if (window.confirm('The server is busy at the moment. Would you like to retry?')) {
-          dispatch(sendAnswersToApi(answers));
-        }
+        setTimeout(() => {
+          dispatch(sendAnswersToApi(answers))
+            .catch((err) => {
+              console.error('Error occurred during sendAnswersToApi:', err);
+              dispatch(setError('Gemini servers are overloaded. Please try again'));
+              })
+        }, 3000);        
       }
   }, [error, dispatch]);
 
@@ -71,7 +75,7 @@ const RecommendationComponent = () => {
           }} className='bg-gray-800 hover:bg-red-600 text-gray-200 font-bold py-2 px-4 m-10 rounded'>
             Looking for something different?
           </button>
-          <button onClick={() => dispatch(sendAnswersToApi(answers))} className='bg-gray-800 hover:bg-red-600 text-gray-200 font-bold py-2 px-4 m-10 rounded'>
+          <button onClick={() => dispatch(sendAnswersToApi(answers)).catch((err) => setError(err))} className='bg-gray-800 hover:bg-red-600 text-gray-200 font-bold py-2 px-4 m-10 rounded'>
             More Recommendations
           </button>
           </div>
