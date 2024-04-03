@@ -14,21 +14,20 @@ const inputs = [
   {
     question: "How are you today?",
     type: "radio",
-    options: ["Good", "Bad", "So-so"],
+    options: ["Good", "Neutral", "Bad"],
   },
   {
     question: "What comes closest to your occasion?",
     type: "radio",
     options: [
       "Just watching a movie by myself",
-      "A movie at the cinemas",
       "Movie Night with Friends",
-      "Date night with partner",
+      "Date Night with a Partner",
       "Watching a movie with family or relatives",
     ],
   },
   {
-    question: "Choose any genres you’re currently open to watching",
+    question: "Choose any genres you’d like to watch",
     type: "checkbox",
     options: [
       "Action",
@@ -39,10 +38,12 @@ const inputs = [
       "Fantasy",
       "Historical",
       "Horror",
+      "Independent",
       "Mystery",
       "Romance",
       "Science Fiction",
       "Thriller",
+      "War",
       "Western",
       "Other",
     ],
@@ -54,8 +55,8 @@ const inputs = [
       "Older than 20 years",
       "Older than 10 years",
       "Older than 5 years",
-      "Older than 2 years",
-      "Newer than 2 years",
+      "Within the past 5 years",
+      "Any year"
     ],
   },
   {
@@ -65,7 +66,7 @@ const inputs = [
     options: ["Yes", "No"],
   },
   {
-    question: "(Optional) Please add some other movies you're interested in:",
+    question: "(Optional) Please add any similar movies you're interested in:",
     type: "text",
     placeholder: "Movie Title",
   },
@@ -76,6 +77,7 @@ const ReactQuestions = () => {
   const dispatch = useDispatch();
   const answers = useSelector((state) => state.myReducers.answers);
   const loading = useSelector((state) => state.myReducers.loading);
+  const user = useSelector((state) => state.myReducers.user);
   const currentQuestionIndex = useSelector(
     (state) => state.myReducers.currentQuestionIndex
   );
@@ -87,6 +89,17 @@ const ReactQuestions = () => {
 
   const handleNext = (event) => {
     event.preventDefault();
+    console.log("CurrentQuestionIndex: ", currentQuestionIndex)
+    let currentAnswers = { ...answers };
+  
+    //Michael testing for userID to fetch movies
+    // if (user !== null) {
+    //   currentAnswers = {
+    //     ...currentAnswers,
+    //     ID: user.UserID
+    //   };
+    //   console.log("is ID added to answers?: ", currentAnswers)
+    // }
     const name = `question_${currentQuestionIndex + 1}`;
     if (!answers[name] && currentQuestion.type !== "text") {
       dispatch(setError("Please select an option"));
@@ -123,8 +136,9 @@ const ReactQuestions = () => {
       //     console.error('Failed to send answers:', error);
       //   }
       // };
-      console.log(answers);
-      dispatch(sendAnswersToApi(answers));
+
+      console.log(currentAnswers);
+      dispatch(sendAnswersToApi(currentAnswers));
       dispatch(setCurrentQuestionIndex(currentQuestionIndex + 1));
     }
   };
