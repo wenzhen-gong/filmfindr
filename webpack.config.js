@@ -82,6 +82,14 @@ module.exports = {
         // excluding everything under node_modules except /bootstrap
         exclude: /node_modules(?!\/bootstrap)/,
         use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+          },
+        ],
       }
     ],
   },

@@ -36,3 +36,8 @@ transition: color 250ms;
   opacity: 0.7;
 }
 `;
+
+export const Logo = styled.img`
+  width: 200px; 
+  height: auto;
+`;
