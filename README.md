@@ -7,7 +7,7 @@ Can't decide on a movie to watch? Struggling to find a something appropriate for
 
 ### Introducing Film Findr
 
-Film Findr is a passion project website to help people find a good movie to watch. Users fill out a quesitonaire and can optionally include similar movies they enjoy and Film Findr currates a list of options for users to pick from. By leveraging Gemini AI and The Movie Database, making the best choice for your next watch becomes easy and fun.
+Film Findr is a passion project website to help people find a good movie to watch. Users fill out a quesitonaire and can optionally include similar movies they enjoy and Film Findr curates a list of options for users to pick from. By leveraging Gemini AI and The Movie Database, making the best choice for your next watch becomes easy and fun.
 
 Users can also sign-up with a free account to keep track of what they've already watched if they're adamant about finding new movies they've never seen.
 
