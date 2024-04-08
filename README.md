@@ -1,4 +1,4 @@
-![Film Findr Logo](https://github.com/michael-w-mann/filmfindr/blob/dev/client/components/statics/film-findr-high-resolution-logo-transparent.png?raw=true)
+<img src="https://github.com/michael-w-mann/filmfindr/blob/dev/client/components/statics/film-findr-high-resolution-logo-transparent.png?raw=true" alt="Film Findr Logo" width="500">
 
 
 
