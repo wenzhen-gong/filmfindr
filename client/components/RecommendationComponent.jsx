@@ -15,6 +15,7 @@ const RecommendationComponent = () => {
   const answers = useSelector((state) => state.myReducers.answers);
   const movieData = useSelector((state) => state.myReducers.movieData);
   const error = useSelector((state) => state.myReducers.error);
+  const watchedMovies = useSelector((state) => state.myReducers.movies)
 
   // const resendAnswersToApi = async (answers) => {
   //   try {
@@ -75,7 +76,7 @@ const RecommendationComponent = () => {
           }} className='bg-gray-800 hover:bg-red-600 text-gray-200 font-bold py-2 px-4 m-10 rounded'>
             Looking for something different?
           </button>
-          <button onClick={() => dispatch(sendAnswersToApi(answers)).catch((err) => setError(err))} className='bg-gray-800 hover:bg-red-600 text-gray-200 font-bold py-2 px-4 m-10 rounded'>
+          <button onClick={() => dispatch(sendAnswersToApi({...answers, watchedMovies})).catch((err) => setError(err))} className='bg-gray-800 hover:bg-red-600 text-gray-200 font-bold py-2 px-4 m-10 rounded'>
             More Recommendations
           </button>
           </div>

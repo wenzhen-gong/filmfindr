@@ -60,10 +60,10 @@ const apiController = {
                         q5 === "Yes" ? q5 = "These movies absolutely must be kid friendly" : q5 = "Movie can be any rating";
                         break;
                     case "question_6":
-                        q6 = req.body[key].join(", ");
+                        q6 = req.body[key].join(", ")
                         break;
-                    case "question_7":
-                        q7 = req.body[key].join(", ");
+                    case "watchedMovies":
+                        q7 = req.body[key].map(movie => movie.MovieTitle).join(', ');
                         break;
                     default:
                         break;
@@ -78,12 +78,12 @@ const apiController = {
                     4. I want movies from ${q4}
                     5. ${q5}
                     6. I want a movie that is similar to these movies: ${q6}
-                       I've already seen these movies. Please do not recommend them to me: ${q7}
+                       I've already seen these movies. NEVER recommend these to me: ${q7}
                 
                     You must return a javascript array of JSON objects, each object with a "Title" property, a "Year" property assigned the release year and a "Reason" property based on the above prompt.
                     `;
                   
-                    // console.log("Prompt: ", prompt)
+                    console.log("Prompt: ", prompt)
                     const result = await model.generateContent(prompt);
                     const response = await result.response;
                     let responseStr = response.text();
@@ -115,7 +115,7 @@ const apiController = {
                       next({
                             log: `callGemini: ${err}`,
                             message: {
-                                err: 'Gemini servers are overloaded. Please try again',
+                                err: 'Gemini servers are overloaded. A re-request will be executed in 3 seconds',
                             },
                             status: 500,
                         });
@@ -178,7 +178,7 @@ const apiController = {
             next({
                 log: `callTMDB: ${err}`,
                 message: {
-                    err: 'Having problems with TMDB. Please try again',
+                    err: 'Having problems with TMDB. A re-request will be executed in 3 seconds',
                 },
                 status: 500,
             });
