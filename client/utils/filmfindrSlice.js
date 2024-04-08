@@ -53,7 +53,7 @@ export const filmfindrSlice = createSlice({
       // other logics need to be written like clear cookies and/or jwt
       state.isLoggedIn = false;
       state.user = null;
-      console.log("mimicing logging out");
+      // console.log("mimicking logging out");
     },
     openSignUpModal: (state) => {
       state.signUpModalOpen = true;
@@ -234,7 +234,7 @@ export const signIn = createAsyncThunk("signIn", async (event, thunkAPI) => {
     email: event.target[0].value,
     password: event.target[1].value,
   });
-  console.log(searchParams.toString());
+  // console.log(searchParams.toString());
 
   try {
     let response = await fetch(`http://localhost:3000/signin/${event.target[0].value}/${event.target[1].value}`, {
@@ -273,7 +273,7 @@ export const fetchMovies = createAsyncThunk("fetchMovies", async ({user}) => {
     }
   );
   const movies = await response.json();
- console.log(movies)
+//  console.log(movies)
   return movies;
 });
 
@@ -314,7 +314,7 @@ export const sendAnswersToApi = createAsyncThunk(
         body: JSON.stringify(answers),
       });
       const data = await response.json();
-      console.log("data: ", data)
+      // console.log("data: ", data)
       if(data.err) {
         return rejectWithValue(data.err);
       }

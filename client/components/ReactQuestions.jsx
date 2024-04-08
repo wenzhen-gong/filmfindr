@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
 import { CircularProgress } from "@mui/material";
 import {
   setError,
@@ -7,6 +8,7 @@ import {
   setAnswers,
   setCurrentInput,
   setMovieRec,
+  fetchMovies
 } from "../utils/filmfindrSlice";
 import "./style.css";
 
@@ -27,7 +29,7 @@ const inputs = [
     ],
   },
   {
-    question: "Choose any genres you’d like to watch",
+    question: "Choose any genres you're in the mood for:",
     type: "checkbox",
     options: [
       "Action",
@@ -81,17 +83,29 @@ const ReactQuestions = () => {
   const currentQuestionIndex = useSelector(
     (state) => state.myReducers.currentQuestionIndex
   );
+  const isLogged = useSelector((state) => state.myReducers.isLoggedIn);
   const error = useSelector((state) => state.myReducers.error);
   const currentInput = useSelector((state) => state.myReducers.currentInput);
   const movieRec = useSelector((state) => state.myReducers.movieRec);
+  const watchedMovies = useSelector((state) => state.myReducers.movies)
+  const state = useSelector((state) => state.myReducers)
+
+  useEffect(() => {
+    if (isLogged) dispatch(fetchMovies({user}));
+
+  }, [dispatch, user, isLogged]);
+
+  // console.log("state: ", state);
+  // console.log("watchedMovies: ", watchedMovies)
+
 
   const currentQuestion = inputs[currentQuestionIndex];
 
   const handleNext = (event) => {
     event.preventDefault();
-    console.log("CurrentQuestionIndex: ", currentQuestionIndex)
-    let currentAnswers = { ...answers };
-  
+    // console.log("CurrentQuestionIndex: ", currentQuestionIndex)
+    const currentAnswers = { ...answers };
+    
     //Michael testing for userID to fetch movies
     // if (user !== null) {
     //   currentAnswers = {
@@ -137,8 +151,9 @@ const ReactQuestions = () => {
       //   }
       // };
 
-      console.log(currentAnswers);
-      dispatch(sendAnswersToApi(currentAnswers));
+      let finalBody = {...currentAnswers, watchedMovies}
+      console.log("finalBody: ", finalBody);
+      dispatch(sendAnswersToApi(finalBody));
       dispatch(setCurrentQuestionIndex(currentQuestionIndex + 1));
     }
   };
@@ -231,12 +246,18 @@ const ReactQuestions = () => {
               <h3 className='flex justify-center items-align text-4xl font-semibold mb-4'>{currentQuestion.question}</h3>
               {currentQuestion.type === "text" ? (
                 <input
-                  type="text"
-                  placeholder={currentQuestion.placeholder}
-                  value={currentInput}
-                  onChange={(e) => dispatch(setCurrentInput(e.target.value))}
-                  className='p-2 w-full border border-gray-600 rounded mb-4 bg-gray-700 text-white text-center mx-auto'
-                />
+                type="text"
+                placeholder={currentQuestion.placeholder}
+                value={currentInput}
+                onChange={(e) => dispatch(setCurrentInput(e.target.value))}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleList(e);
+                  }
+                }}
+                className='p-2 w-full border border-gray-600 rounded mb-4 bg-gray-700 text-white text-center mx-auto'
+              />
               ) : (
                 currentQuestion.options.map((option, index) => (
                   <div key={index} className='flex justify-center items-center text-2xl mb-2'>
