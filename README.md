@@ -1,7 +1,7 @@
 ## filmfindr
 filmfindr is a movie recommendation application that leverages the power of AI to provide personalized movie suggestions based on user queries.
 
-## TechStack
+## Tech Stack
 [![My Skills](https://skillicons.dev/icons?i=react,redux,nodejs,express,postgresql,tailwindcss,jest)](https://skillicons.dev)
 
 ## Features
