@@ -8,9 +8,10 @@ import {
   openSignInModal,
   sendAnswersToApi
 } from "../utils/filmfindrSlice";
-import { TopRightButton, TopLeftButton } from "./styledcomponents";
+import { TopRightButton, TopLeftButton, Logo } from "./styledcomponents";
 import SignUpModal from "./SignUpModal";
 import SignInModal from "./SignInModal";
+import logoImage from "./statics/film-findr-high-resolution-logo-transparent.png"
 import "./style.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -19,7 +20,6 @@ function App() {
   const user = useSelector((state) => state.myReducers.user);
   const answers = useSelector((state) => state.myReducers.answers);
   const error = useSelector((state) => state.myReducers.error);
-
 
   const dispatch = useDispatch();
 
@@ -31,58 +31,52 @@ function App() {
     }
   }, [error, dispatch, answers]);
 
-  return (
-    <>
-    <div className="flex justify-between bg-black p-2 fixed top-0 right-0 left-0 opacity-90">
-        <div>
-          {isLoggedIn ? (
-            <TopLeftButton onClick={() => dispatch(openSignInModal())}>
-              hi, {user.UserName}
-            </TopLeftButton>
-          ) : (
-            <>
-              <TopLeftButton onClick={() => dispatch(openSignUpModal())}>
-                Sign Up
-              </TopLeftButton>
+   return (
+    <div className="app-container">
+        <div className="flex justify-between bg-black p-2 opacity-90">
+          <div>
+            {isLoggedIn ? (
               <TopLeftButton onClick={() => dispatch(openSignInModal())}>
-                Sign In
+                hi, {user.UserName}
               </TopLeftButton>
-              {/* <TopLeftButton
-                onClick={() =>
-                  dispatch(fetchUser())
-                    .unwrap()
-                    .then((data) => {
-                      console.log(data);
-                    })
-                }
-              >
-                TRY fetchuser
-              </TopLeftButton> */}
-            </>
-          )}
+            ) : (
+              <>
+                <TopLeftButton onClick={() => dispatch(openSignUpModal())}>
+                  Sign Up
+                </TopLeftButton>
+                <TopLeftButton onClick={() => dispatch(openSignInModal())}>
+                  Sign In
+                </TopLeftButton>
+              </>
+            )}
+          </div>
+          <div>
+            <Logo src={logoImage} alt="FilmFindr Logo" />
+          </div>
+          <div className="nav-links">
+            <TopRightButton>
+              {/* <Link className="link" to="/">Home</Link> */}
+            </TopRightButton>
+            <TopRightButton>
+              {/* <Link className="link" to="mymovies">My Movies</Link> */}
+            </TopRightButton>
+            <TopRightButton onClick={() => dispatch(handlelogOut())}>
+              <Link className="link" to="/">Log Out </Link>
+            </TopRightButton>
+          </div>
         </div>
-        <div className="nav-links">
-          <TopRightButton>
-            <Link className="link" to="/">Home</Link>
-          </TopRightButton>
-          <TopRightButton>
-            <Link className="link" to="mymovies">My Movies</Link>
-          </TopRightButton>
-          <TopRightButton onClick={() => dispatch(handlelogOut())}>
-            <Link className="link" to="/">Log Out </Link>
-          </TopRightButton>
-        </div>
-      </div>
       
       <SignUpModal />
       <SignInModal />
 
-      <div>
-        <Outlet />
+      <div className="content-container">
+        <div className="outlet-wrapper">
+          <Outlet />
+        </div>
       </div>
-
-    </>
+    </div>
   );
+  
 }
 
 export default App;

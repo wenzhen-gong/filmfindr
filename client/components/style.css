@@ -8,6 +8,7 @@ body {
   position: relative;
   margin: 0 auto;
   z-index: 0;
+  background-color: black;
 }
 /* body::after{
   background: url('./statics/movie.jpeg');
@@ -78,3 +79,15 @@ body::after {
   justify-content: space-between; 
   flex-wrap: wrap;
 } */
+
+.app-container {
+  position: relative;
+}
+
+.content-container {
+  margin-top: 100px; 
+}
+
+.outlet-wrapper {
+  position: relative;
+}
