@@ -14,6 +14,7 @@ const initialState = {
   // below are David's states
   answers: {},
   currentQuestionIndex: 0,
+  previousMovies: [],
   movieData: [
     // {
     //   picture:
@@ -134,6 +135,9 @@ export const filmfindrSlice = createSlice({
     resetMovieData: (state) => {
       state.movieData = [];
     },
+    resetPreviousMovies: (state) => {
+      state.previousMovies = [];
+    },
 
     // // for personal review purpose
     //   handleReview: {
@@ -180,6 +184,7 @@ export const filmfindrSlice = createSlice({
     builder.addCase(sendAnswersToApi.fulfilled, (state, action) => {
       state.loading = false;
       state.movieData = action.payload;
+      state.previousMovies = [...state.previousMovies, ...state.movieData];
     });
     builder.addCase(sendAnswersToApi.pending, (state, action) => {
       state.loading = true;
@@ -208,6 +213,7 @@ export const {
   setCurrentInput,
   setMovieRec,
   resetMovieData,
+  resetPreviousMovies,
 } = filmfindrSlice.actions;
 
 export default filmfindrSlice.reducer;

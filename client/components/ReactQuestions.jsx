@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import {
@@ -83,6 +84,7 @@ const ReactQuestions = () => {
   );
   const error = useSelector((state) => state.myReducers.error);
   const currentInput = useSelector((state) => state.myReducers.currentInput);
+  const previousMovies = useSelector((state) => state.myReducers.previousMovies);
   const movieRec = useSelector((state) => state.myReducers.movieRec);
 
   const currentQuestion = inputs[currentQuestionIndex];
@@ -90,7 +92,7 @@ const ReactQuestions = () => {
   const handleNext = (event) => {
     event.preventDefault();
     console.log("CurrentQuestionIndex: ", currentQuestionIndex)
-    let currentAnswers = { ...answers };
+    let currentAnswers =  { ...answers };
   
     //Michael testing for userID to fetch movies
     // if (user !== null) {
@@ -138,7 +140,7 @@ const ReactQuestions = () => {
       // };
 
       console.log(currentAnswers);
-      dispatch(sendAnswersToApi(currentAnswers));
+      dispatch(sendAnswersToApi({answers, previousMovies}));
       dispatch(setCurrentQuestionIndex(currentQuestionIndex + 1));
     }
   };
@@ -224,7 +226,7 @@ const ReactQuestions = () => {
     ) : (
       currentQuestion &&
       currentQuestionIndex <= inputs.length - 1 && (
-        <div className="flex flex-col items-center justify-center text-gray-200 w-screen h-screen">
+        <div className="flex flex-col items-center text-gray-200 w-screen h-screen">
           <h1 className='text-6xl font-bold mb-8'>Movie Questions</h1>
           <form onSubmit={handleNext} name="questions" className={`flex flex-col space-between bg-gray-800 w-[80vw] p-10 rounded shadow-md`}>
             <div className='flex flex-col space-between'>

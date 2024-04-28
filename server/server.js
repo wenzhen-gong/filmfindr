@@ -25,6 +25,7 @@ const apiController = require('./controllers/apiController.js')
 app.use(cookieParser());
 app.use(cors())
 app.use(express.json());
+app.use(express.static(path.resolve(__dirname, './client/statics')));
 app.use('/', express.static(path.resolve(__dirname, '../dist')));
 
 

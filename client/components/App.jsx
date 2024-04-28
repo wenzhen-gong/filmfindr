@@ -11,7 +11,7 @@ import {
 import { TopRightButton, TopLeftButton, Logo } from "./styledcomponents";
 import SignUpModal from "./SignUpModal";
 import SignInModal from "./SignInModal";
-import logoImage from "./statics/film-findr-high-resolution-logo-transparent.png"
+import logoImage from "./statics/film-findr-high-resolution-logo-transparent-RED.png"
 import "./style.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -19,6 +19,7 @@ function App() {
   const isLoggedIn = useSelector((state) => state.myReducers.isLoggedIn);
   const user = useSelector((state) => state.myReducers.user);
   const answers = useSelector((state) => state.myReducers.answers);
+  const previousMovies = useSelector((state) => state.myReducers.previousMovies);
   const error = useSelector((state) => state.myReducers.error);
 
   const dispatch = useDispatch();
@@ -26,10 +27,10 @@ function App() {
   useEffect(() => {
     if (error && error.status >=  500 && error.status < 600) {
       if (window.confirm('The server is busy at the moment. Would you like to retry?')) {
-        dispatch(sendAnswersToApi(answers));
+        dispatch(sendAnswersToApi({ answers, previousMovies }));
       }
     }
-  }, [error, dispatch, answers]);
+  }, [error, dispatch, answers, previousMovies]);
 
    return (
     <div className="app-container">

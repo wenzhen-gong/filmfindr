@@ -38,39 +38,43 @@ const apiController = {
     async callGemini (req, res, next) {
         try {
         const model = genAI.getGenerativeModel({ model: "gemini-pro"});
-        // console.log("req.body in gemini: ", req.body);
+        const answers = req.body.answers;
+        const previousMovies = req.body.previousMovies;
         let q1, q2, q3, q4, q5, q6, q7;
 
-            for (const key in req.body) {
+            for (const key in answers) {
                 switch (key) {
                     case "question_1":
-                        q1 = req.body[key];
+                        q1 = answers[key];
                         break;
                     case "question_2":
-                        q2 = req.body[key];
+                        q2 = answers[key];
                         break;
                     case "question_3":
-                        q3 = req.body[key].join(", ");
+                        q3 = answers[key].join(", ");
                         break;
                     case "question_4":
-                        q4 = req.body[key];
+                        q4 = answers[key];
                         break;
                     case "question_5":
-                        q5 = req.body[key];
+                        q5 = answers[key];
                         q5 === "Yes" ? q5 = "These movies absolutely must be kid friendly" : q5 = "Movie can be any rating";
                         break;
                     case "question_6":
-                        q6 = req.body[key].join(", ");
+                        q6 = answers[key].join(", ");
                         break;
                     case "question_7":
-                        q7 = req.body[key].join(", ");
+                        q7 = answers[key].join(", ");
                         break;
                     default:
                         break;
                 }
             }
-                  
-                    const prompt = `I'm looking for three movie recommendations based on these criteria:
+                    let prompt;  
+
+                    if(previousMovies.length > 0){
+                    
+                    prompt = `I'm looking for three movie recommendations based on these criteria:
                 
                     1. I feel ${q1} today
                     2. ${q2}
@@ -78,10 +82,25 @@ const apiController = {
                     4. I want movies from ${q4}
                     5. ${q5}
                     6. I want a movie that is similar to these movies: ${q6}
-                       I've already seen these movies. Please do not recommend them to me: ${q7}
+                    7. I've already seen these movies. Please do not recommend them to me: ${previousMovies.map(movie => movie.title).join(", ")}.
                 
                     You must return a javascript array of JSON objects, each object with a "Title" property, a "Year" property assigned the release year and a "Reason" property based on the above prompt.
                     `;
+
+                    } else {
+                    prompt = `I'm looking for three movie recommendations based on these criteria:
+            
+                    1. I feel ${q1} today
+                    2. ${q2}
+                    3. I'm interested in these genres: ${q3}
+                    4. I want movies from ${q4}
+                    5. ${q5}
+                    6. I want a movie that is similar to these movies: ${q6}
+                
+                    You must return a javascript array of JSON objects, each object with a "Title" property, a "Year" property assigned the release year and a "Reason" property based on the above prompt.
+                    `;
+
+                    }
                   
                     // console.log("Prompt: ", prompt)
                     const result = await model.generateContent(prompt);

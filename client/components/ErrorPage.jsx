@@ -8,12 +8,13 @@ export default function ErrorPage() {
   const dispatch = useDispatch();
   const error = useRouteError();
   const answers = useSelector((state) => state.myReducers.answers);
+  const previousMovies = useSelector((state) => state.myReducers.previousMovies);
   console.error(error);
 
   useEffect(() => {
     if (error && error.status >=  500 && error.status < 600) {
       if (window.confirm('The server is busy at the moment. Would you like to retry?')) {
-        dispatch(sendAnswersToApi(answers));
+        dispatch(sendAnswersToApi({ answers, previousMovies }));
       }
     }
   }, [error, dispatch, answers]);
