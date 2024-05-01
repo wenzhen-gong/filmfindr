@@ -1,0 +1,93 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+body {
+  width: 100%;
+  height: 1200px;
+  display: block;
+  position: relative;
+  margin: 0 auto;
+  z-index: 0;
+  background-color: black;
+}
+/* body::after{
+  background: url('./statics/movie.jpeg');
+  background-size: cover;
+  opacity: 0.5;
+} */
+
+body::after {
+  background: black;
+  background-size: cover;
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: -1;   
+}
+
+.link{
+  color:#F5F5F5;
+  background:  black;
+  background-size: cover;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.link:hover {
+  color: red;
+  transition: color 250ms;
+}
+
+/* .nav-links{
+  top: 0;
+  right: 0;
+} */
+
+
+/* .questions-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: white 1px solid;
+  border-radius: 10px;
+  padding: 100px;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.recommendation-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: white 1px solid;
+  border-radius: 10px;
+  margin: auto;
+  padding: 50px;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.recommendations-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; 
+  flex-wrap: wrap;
+} */
+
+.app-container {
+  position: relative;
+}
+
+.content-container {
+  margin-top: 100px; 
+}
+
+.outlet-wrapper {
+  position: relative;
+}
