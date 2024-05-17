@@ -8,7 +8,7 @@ const TMDBoptions = {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2OTQ2MDE4YWM2NTc1MGMwYTY4MGMwYmY2ZWVhYmVjNyIsInN1YiI6IjY1ZTY4ZmUzZjg1OTU4MDE3YjlhNjA5YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qoy7JhJolYXc0MOjK2-yXRNSW4Ea1raX5g38liW9AiM'
+      Authorization: `Bearer ${process.env.TMDB_API_KEY}`
     }
   };
 
@@ -37,6 +37,7 @@ const genreTable = {
 const apiController = {
     async callGemini (req, res, next) {
         try {
+
         const model = genAI.getGenerativeModel({ model: "gemini-pro"});
         // console.log("req.body in gemini: ", req.body);
         let q1, q2, q3, q4, q5, q6, q7;
@@ -83,7 +84,7 @@ const apiController = {
                     You must return a javascript array of JSON objects, each object with a "Title" property, a "Year" property assigned the release year and a "Reason" property based on the above prompt.
                     `;
                   
-                    console.log("Prompt: ", prompt)
+                    // console.log("Prompt: ", prompt)
                     const result = await model.generateContent(prompt);
                     const response = await result.response;
                     let responseStr = response.text();
@@ -122,7 +123,6 @@ const apiController = {
                     } 
         },
         async callTMDB(req, res, next) {
-
             const suggestionsArr = res.locals.suggestionsArr;
 
             // console.log("passed in suggestionsArr: ", suggestionsArr)
